@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">ExaMate</string>
+    <string name="Welcome">Welcome to ExaMate app</string>
+    <string name="About">An application for managing a frontal exam in a safe and easy way!</string>
+    <string name="LetsGo">Let\'s Go!</string>
+    <string name="login_title">Please fill your personal details</string>
+    <string name="form_first_name" >First Name</string>
+    <string name="form_last_name" >Last Name</string>
+    <string name="form_email" >Email</string>
+    <string name="form_academy" >Academic Institution</string>
+    <string name="save">save</string>
+    <string name="home_my_classes">My Classes</string>
+    <string name="fill_all_fields_message">Please fill in all fields</string>
+    <string name="invalid_email_message">Please enter a valid email address</string>
+    <string name="save_succeeded">Welcome! The details have been successfully saved</string>
+    <string name="home_create_new_class">Create New Class</string>
+    <string name="home_join_a_class">Join a Class</string>
+    <string name="home_my_files">My Files</string>
+</resources>

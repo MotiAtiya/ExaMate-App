@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ExaMate</string>
+    <string name="Welcome">ברוך הבא לאפליקציית המבחנים ExaMate</string>
+    <string name="LetsGo">בוא נתחיל!</string>
+    <string name="About">אפליקציה לניהול מבחן פרונטלי בצורה בטוחה וקלה!</string>
+    <string name="login_title">בבקשה מלא את הפרטים האישיים שלך</string>
+    <string name="form_first_name">שם פרטי</string>
+    <string name="form_last_name">שם משפחה</string>
+    <string name="form_email">אימייל</string>
+    <string name="form_academy">מוסד אקדמי</string>
+    <string name="save">שמור</string>
+    <string name="home_my_classes">הכיתות שלי</string>
+    <string name="fill_all_fields_message">מלא בבקשה את כל השדות</string>
+    <string name="invalid_email_message">הכנס בבקשה כתובת אימייל חוקית</string>
+    <string name="save_succeeded">ברוך הבא! הפרטים נשמרו בהצלחה</string>
+    <string name="home_create_new_class">יצירת כיתה חדשה</string>
+    <string name="home_join_a_class">הצטרפות לכיתה</string>
+    <string name="home_my_files">הקבצים שלי</string>
+</resources>
