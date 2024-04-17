@@ -4,7 +4,7 @@
     <string name="Welcome">ברוך הבא לאפליקציית המבחנים ExaMate</string>
     <string name="LetsGo">בוא נתחיל!</string>
     <string name="About">אפליקציה לניהול מבחן פרונטלי בצורה בטוחה וקלה!</string>
-    <string name="login_title">בבקשה מלא את הפרטים האישיים שלך</string>
+    <string name="login_title">מלא את הפרטים האישיים שלך בבקשה</string>
     <string name="form_first_name">שם פרטי</string>
     <string name="form_last_name">שם משפחה</string>
     <string name="form_email">אימייל</string>
@@ -17,4 +17,18 @@
     <string name="home_create_new_class">יצירת כיתה חדשה</string>
     <string name="home_join_a_class">הצטרפות לכיתה</string>
     <string name="home_my_files">הקבצים שלי</string>
+    <string name="create_new_class_title">צור כיתה חדשה</string>
+    <string name="course_name">שם הקורס</string>
+    <string name="hours">שעות</string>
+    <string name="hour">שעה</string>
+    <string name="select_hours">בחר שעה</string>
+    <string name="exam_start_time">זמן התחלת המבחן:</string>
+    <string name="duration">משך זמן המבחן:</string>
+    <string name="select_minutes">בחר דקות</string>
+    <string name="minutes">דקות</string>
+    <string name="minute">דקה</string>
+    <string name="warning">זכור! כל ניסיון לשינוי הרשאות ידווח מיד למשגיח באופן אוטומטי</string>
+    <string name="view_files">צפייה בקבצים</string>
+    <string name="finish">סיום</string>
+    <string name="course_name_example">מערכות ספרתיות</string>
 </resources>

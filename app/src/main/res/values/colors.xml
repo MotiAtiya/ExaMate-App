@@ -2,4 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#1E2538</color>
+    <color name="colorPrimaryDark">#0E121B</color>
+    <color name="colorAccent">#F5FA55</color>
+    <color name="colorBackground">#151B29</color>
+    <color name="colorYellow">#F5FA55</color>
+    <color name="colorPurple">#63519f</color>
+    <color name="my_light_primary">#ec442c</color>
+    <color name="my_dark_primary">#263238</color>
 </resources>

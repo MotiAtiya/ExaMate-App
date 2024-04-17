@@ -29,18 +29,19 @@ class LoginActivity : AppCompatActivity() {
 
 // Validate input if needed
             if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()) {
-                // Display error message if any field is empty
+//                 Display error message if any field is empty
                 Toast.makeText(applicationContext, R.string.fill_all_fields_message, Toast.LENGTH_SHORT).show()
             } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                // Display error message if email format is invalid
+//                 Display error message if email format is invalid
                 Toast.makeText(applicationContext, R.string.invalid_email_message, Toast.LENGTH_SHORT).show()
             } else {
-                // Process the form data if all validations pass
+//                 Process the form data if all validations pass
                 saveFormData(firstName, lastName, email)
             }
         }
-
     }
+
+
     // Method to save form data
     private fun saveFormData(firstName: String, lastName: String, email: String) {
         Toast.makeText(applicationContext, R.string.save_succeeded, Toast.LENGTH_SHORT).show()
