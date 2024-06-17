@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark mode colors -->
+    <color name="card_background">#424242</color> <!-- Dark gray -->
+    <color name="card_text">#FFFFFF</color> <!-- White -->
+</resources>

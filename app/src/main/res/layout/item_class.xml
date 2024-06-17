@@ -1,29 +1,87 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:orientation="vertical">
+    android:layout_margin="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    card_view:cardBackgroundColor="@color/card_background"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/textClassName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textClassDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"/>
+        <TextView
+            android:id="@+id/className"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Class Name"
+            android:textColor="@color/card_text"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textClassTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"/>
+        <TextView
+            android:id="@+id/classDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Date"
+            android:textColor="@color/card_text"
+            android:textSize="18sp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/classTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Time"
+            android:textColor="@color/card_text"
+            android:textSize="18sp" />
+
+        <!-- New Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonDelete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:layout_weight="1"
+                android:text="Delete"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/buttonEdit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_weight="1"
+                android:text="Edit"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/buttonStartExam"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_weight="2"
+                android:text="Start Exam"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

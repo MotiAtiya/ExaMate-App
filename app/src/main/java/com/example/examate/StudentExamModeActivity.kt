@@ -5,10 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
-import android.view.View
 import android.widget.Toast
-import androidx.core.text.layoutDirection
-import androidx.core.view.ViewCompat
 import com.example.examate.databinding.ActivityStudentExamModeBinding
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -18,7 +15,7 @@ class StudentExamModeActivity : AppCompatActivity() {
 
     private lateinit var countDownTimer: CountDownTimer
     private var timerRunning = false
-    private var initialTimeMillis: Long = 600000 // Default timer duration in milliseconds (1 minute)
+    private var initialTimeMillis: Long = 600000 // Default timer duration in milliseconds (10 minutes)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +23,12 @@ class StudentExamModeActivity : AppCompatActivity() {
 
         binding = ActivityStudentExamModeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val className = intent.getStringExtra("EXAM_NAME")
+        val remainingTimeMillis = intent.getLongExtra("REMAINING_TIME_MILLIS", 600000)
+
+        binding.textView6.text = className
+        initialTimeMillis = remainingTimeMillis
 
         val progressBar = binding.progressBarCircle
         if (Locale.getDefault().language == "en") {

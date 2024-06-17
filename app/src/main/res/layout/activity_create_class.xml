@@ -49,6 +49,7 @@
             android:id="@+id/pickDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@string/select_date"
             android:layout_weight="1"/>
 
         <View
@@ -60,6 +61,7 @@
             android:id="@+id/pickTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@string/select_time"
             android:layout_weight="1" />
 
     </LinearLayout>
@@ -102,6 +104,12 @@
 
     </LinearLayout>
 
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/open_materials" />
 
     <Button
         android:id="@+id/button_save"
@@ -110,5 +118,6 @@
         android:layout_marginTop="24dp"
         android:text="@string/save"
         android:textSize="16sp" />
+
 
 </LinearLayout>

@@ -22,6 +22,8 @@
     <string name="hours">שעות</string>
     <string name="hour">שעה</string>
     <string name="select_hours">בחר שעה</string>
+    <string name="select_date">בחר תאריך</string>
+    <string name="select_time">בחר זמן</string>
     <string name="exam_start_time">זמן התחלת המבחן:</string>
     <string name="duration">משך זמן המבחן:</string>
     <string name="select_minutes">בחר דקות</string>
@@ -31,4 +33,10 @@
     <string name="view_files">צפייה בקבצים</string>
     <string name="finish">סיום</string>
     <string name="course_name_example">מערכות ספרתיות</string>
+    <string name="open_materials">אפשר חומר פתוח</string>
+    <string name="student">סטודנט (הצטרפות למבחן)</string>
+    <string name="teacher">מרצה (ניהול כיתות)</string>
+    <string name="select_status">בחר את הסטטוס שלך</string>
+    <string name="hello">שלום</string>
+    <string name="logout">התנתקות</string>
 </resources>

@@ -11,7 +11,7 @@ class MinuteSelectionDialog : DialogFragment() {
     private lateinit var listener: MinuteSelectionListener
 
     interface MinuteSelectionListener {
-        fun onMinuteSelected(minute: String)
+        fun onMinuteSelected(minute: Int)
     }
 
     override fun onAttach(context: Context) {
@@ -25,6 +25,7 @@ class MinuteSelectionDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val minutes = ArrayList<String>()
+        val minuteValues = ArrayList<Int>()
 
         for (i in 0..59) {
             val minuteString = if (i == 1) {
@@ -33,15 +34,16 @@ class MinuteSelectionDialog : DialogFragment() {
                 "$i ${getString(R.string.minutes)}"
             }
             minutes.add(minuteString)
+            minuteValues.add(i)
         }
 
         val items = minutes.toTypedArray()
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(R.string.select_minutes)
-        builder.setItems(items) { dialog, which ->
-            val selectedMinute = items[which]
-            listener?.onMinuteSelected(selectedMinute)
+        builder.setItems(items) { _, which ->
+            val selectedMinute = minuteValues[which]
+            listener.onMinuteSelected(selectedMinute)
         }
 
         return builder.create()
