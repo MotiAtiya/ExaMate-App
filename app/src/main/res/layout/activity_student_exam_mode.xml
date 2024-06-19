@@ -35,7 +35,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:paddingHorizontal="20dp"
+        android:paddingHorizontal="22dp"
         android:text="@string/warning"
         android:textColor="@color/my_light_primary"
         android:textSize="16sp" />
@@ -47,7 +47,8 @@
         android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
         android:text="@string/course_name_example"
-        android:textSize="22sp" />
+        android:textSize="28sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,7 +60,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/selectHourButton"
+            android:id="@+id/viewFilesButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -10,7 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.PUT
 import retrofit2.http.Url
 import java.security.cert.CertificateException
 import javax.net.ssl.HostnameVerifier

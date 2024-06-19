@@ -40,6 +40,9 @@ class MyClassesActivity : AppCompatActivity() {
         val teacherId = sharedPreferences.getString("TeacherId", null)
 
         if (teacherId != null) {
+            // Show loading spinner
+            binding.progressBar.visibility = android.view.View.VISIBLE
+
             // Prepare the POST request body
             val requestBody = GetClassesByIdRequest(
                 teacherId = teacherId
@@ -47,6 +50,9 @@ class MyClassesActivity : AppCompatActivity() {
 
             // Fetch data and update adapter
             NetworkUtils.postRequest("getClassesById", requestBody) { jsonElement ->
+                // Hide loading spinner
+                binding.progressBar.visibility = android.view.View.GONE
+
                 if (jsonElement != null) {
                     val classesJsonArray = jsonElement.asJsonObject.getAsJsonArray("classes")
                     val classesList = mutableListOf<ClassItem>()
@@ -70,8 +76,19 @@ class MyClassesActivity : AppCompatActivity() {
 
                     // Update adapter with fetched data
                     classesAdapter.updateClasses(classesList)
+
+                    // Show or hide the empty message based on the list size
+                    if (classesList.isEmpty()) {
+                        binding.recyclerViewClasses.visibility = android.view.View.GONE
+                        binding.emptyTextView.visibility = android.view.View.VISIBLE
+                    } else {
+                        binding.recyclerViewClasses.visibility = android.view.View.VISIBLE
+                        binding.emptyTextView.visibility = android.view.View.GONE
+                    }
                 } else {
                     Log.d("POST response", "Failed to get response")
+                    binding.recyclerViewClasses.visibility = android.view.View.GONE
+                    binding.emptyTextView.visibility = android.view.View.VISIBLE
                 }
             }
         } else {
@@ -97,6 +114,7 @@ class MyClassesActivity : AppCompatActivity() {
                     Toast.makeText(this, "Class deleted successfully", Toast.LENGTH_SHORT).show()
                     // Refresh the list after deletion
                     classesAdapter.updateClasses(classesAdapter.classesList.filter { it.classId != classItem.classId })
+                    checkIfListIsEmpty()
                 } else {
                     Toast.makeText(this, "Failed to delete class", Toast.LENGTH_SHORT).show()
                 }
@@ -128,6 +146,16 @@ class MyClassesActivity : AppCompatActivity() {
             intent.putExtra("className", classItem.name)
             intent.putExtra("classId", classItem.classId)
             startActivity(intent)
+        }
+    }
+
+    private fun checkIfListIsEmpty() {
+        if (classesAdapter.classesList.isEmpty()) {
+            binding.recyclerViewClasses.visibility = android.view.View.GONE
+            binding.emptyTextView.visibility = android.view.View.VISIBLE
+        } else {
+            binding.recyclerViewClasses.visibility = android.view.View.VISIBLE
+            binding.emptyTextView.visibility = android.view.View.GONE
         }
     }
 }

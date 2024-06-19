@@ -24,7 +24,8 @@ class StudentHomeActivity : AppCompatActivity() {
         }
 
         binding.buttonMyFiles.setOnClickListener {
-            // Navigate to MyFilesActivity
+            val intent = Intent(this, MyFilesActivity::class.java)
+            startActivity(intent)
         }
 
         binding.buttonLogout.setOnClickListener {

@@ -1,22 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_join_class"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
+    tools:context=".JoinClassActivity"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/class_id_input"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/warningText"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Enter Class ID"
-        android:inputType="text" />
+        android:text="Warning: Once you enter the exam, you are not allowed to exit the application or change permissions!"
+        android:textSize="22sp"
+        android:padding="20dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.8"/>
 
     <Button
-        android:id="@+id/button_submit"
+        android:id="@+id/buttonSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Join Class"
-        android:layout_marginTop="16dp" />
-</LinearLayout>
+        android:text="Scan QR Code"
+        android:textSize="22sp"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/warningText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.7"/>
+
+    <Button
+        android:id="@+id/buttonEnterId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter code manually"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:padding="12dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/buttonSubmit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.7"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

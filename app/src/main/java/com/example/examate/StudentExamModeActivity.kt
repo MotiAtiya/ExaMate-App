@@ -16,6 +16,7 @@ class StudentExamModeActivity : AppCompatActivity() {
     private lateinit var countDownTimer: CountDownTimer
     private var timerRunning = false
     private var initialTimeMillis: Long = 600000 // Default timer duration in milliseconds (10 minutes)
+    private var isOpenMaterialAllowed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,7 @@ class StudentExamModeActivity : AppCompatActivity() {
 
         val className = intent.getStringExtra("EXAM_NAME")
         val remainingTimeMillis = intent.getLongExtra("REMAINING_TIME_MILLIS", 600000)
+        isOpenMaterialAllowed = intent.getBooleanExtra("IS_OPEN_MATERIAL_ALLOWED", false)
 
         binding.textView6.text = className
         initialTimeMillis = remainingTimeMillis
@@ -37,6 +39,14 @@ class StudentExamModeActivity : AppCompatActivity() {
             progressBar.rotation = 90f
             progressBar.rotationY = 180f
         }
+
+        binding.viewFilesButton.setOnClickListener {
+            val intent = Intent(this, ExamFilesActivity::class.java).apply {
+                putExtra("IS_OPEN_MATERIAL_ALLOWED", isOpenMaterialAllowed)
+            }
+            startActivity(intent)
+        }
+
         startTimer()
     }
 
@@ -54,7 +64,7 @@ class StudentExamModeActivity : AppCompatActivity() {
                 Toast.makeText(this@StudentExamModeActivity, "Time's up!", Toast.LENGTH_LONG).show()
 
                 // Start HomeActivity using this@ExamModeActivity as the context
-                val intent = Intent(this@StudentExamModeActivity, HomeActivity::class.java)
+                val intent = Intent(this@StudentExamModeActivity, StudentHomeActivity::class.java)
                 startActivity(intent)
             }
         }

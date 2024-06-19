@@ -10,6 +10,7 @@ import com.example.examate.databinding.ActivityCreateClassBinding
 import com.example.examate.data.CreateClassRequest
 import com.example.examate.data.EditClassRequest
 
+@Suppress("IMPLICIT_CAST_TO_ANY")
 class CreateClassActivity : AppCompatActivity(), TimePickerFragment.TimePickerListener, DatePickerFragment.DatePickerListener,
     HourSelectionDialog.HourSelectionListener, MinuteSelectionDialog.MinuteSelectionListener {
 
