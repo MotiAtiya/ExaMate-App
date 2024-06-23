@@ -34,27 +34,27 @@ class JoinClassActivity : AppCompatActivity() {
     private fun startQrCodeScanner() {
         val integrator = IntentIntegrator(this)
         integrator.setOrientationLocked(false)
-        integrator.setPrompt("Scan a QR code")
+        integrator.setPrompt(getString(R.string.scan_qr_code_prompt))
         integrator.initiateScan()
     }
 
     private fun showEnterClassIdDialog() {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Enter Class ID")
+        builder.setTitle(getString(R.string.enter_class_id))
 
         val input = EditText(this)
-        input.hint = "Class ID"
+        input.hint = getString(R.string.class_id_hint)
         builder.setView(input)
 
-        builder.setPositiveButton("OK") { dialog, _ ->
+        builder.setPositiveButton(getString(R.string.ok)) { dialog, _ ->
             val classId = input.text.toString()
             if (classId.isEmpty()) {
-                Toast.makeText(this, "Please enter a class ID", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_enter_class_id), Toast.LENGTH_SHORT).show()
             } else {
                 joinClass(classId)
             }
         }
-        builder.setNegativeButton("Cancel") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
             dialog.cancel()
         }
 
@@ -65,7 +65,7 @@ class JoinClassActivity : AppCompatActivity() {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
             if (result.contents == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.cancelled), Toast.LENGTH_LONG).show()
             } else {
                 val classId = result.contents
                 joinClass(classId)
@@ -119,7 +119,7 @@ class JoinClassActivity : AppCompatActivity() {
                         }
 
                         if (currentDateTime.before(testDateTime) || currentDateTime.after(testEndDateTime)) {
-                            Toast.makeText(this, "This class is not scheduled for the current time.", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this, getString(R.string.class_not_scheduled), Toast.LENGTH_LONG).show()
                             val intent = Intent(this, StudentHomeActivity::class.java)
                             startActivity(intent)
                             finish()
@@ -132,19 +132,17 @@ class JoinClassActivity : AppCompatActivity() {
                             }
                             startActivity(intent)
                             finish()  // Close this activity
-                            startActivity(intent)
-                            finish()  // Close this activity
                         }
                     } else {
-                        Toast.makeText(this, "Class ID not found", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.class_id_not_found), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this, "Failed to join class", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.failed_to_join_class), Toast.LENGTH_SHORT).show()
                     Log.e("JoinClassActivity", "Invalid response or not a JSON object: $jsonElement")
                 }
             }
         } else {
-            Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.user_data_not_found), Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -30,7 +30,7 @@ class MyFilesActivity : AppCompatActivity() {
 
         // Initialize RecyclerView and set empty adapter initially
         binding.recyclerViewFiles.layoutManager = LinearLayoutManager(this)
-        filesAdapter = FilesAdapter(emptyList(), this::openFile)
+        filesAdapter = FilesAdapter(emptyList(), this::openFile, this::removeFile)
         binding.recyclerViewFiles.adapter = filesAdapter
 
         binding.buttonAddFile.setOnClickListener {
@@ -113,6 +113,20 @@ class MyFilesActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "File not found", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun removeFile(fileName: String) {
+        val file = File(filesDir, fileName)
+        if (file.exists()) {
+            file.delete()
+        }
+
+        val fileNames = sharedPreferences.getStringSet("fileNames", mutableSetOf())?.toMutableSet() ?: mutableSetOf()
+        fileNames.remove(fileName)
+        sharedPreferences.edit().putStringSet("fileNames", fileNames).apply()
+
+        Toast.makeText(this, "File deleted: $fileName", Toast.LENGTH_SHORT).show()
+        loadFiles()
     }
 
     companion object {

@@ -7,4 +7,4 @@
     android:textSize="20sp"
     android:textStyle="bold"
     android:padding="16dp"
-    android:text="Class ID QR Code"/>
+    android:text="@string/class_id_qr_code"/>

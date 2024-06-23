@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
-        android:text="@string/course_name_example"
+        android:text=""
         android:textSize="28sp"
         android:textStyle="bold" />
 

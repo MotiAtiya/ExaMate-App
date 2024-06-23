@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ExaMate</string>
     <string name="Welcome">ברוך הבא לאפליקציית המבחנים ExaMate</string>
@@ -32,11 +31,43 @@
     <string name="warning">זכור! כל ניסיון לשינוי הרשאות ידווח מיד למשגיח באופן אוטומטי</string>
     <string name="view_files">צפייה בקבצים</string>
     <string name="finish">סיום</string>
-    <string name="course_name_example">מערכות ספרתיות</string>
     <string name="open_materials">אפשר חומר פתוח</string>
     <string name="student">סטודנט (הצטרפות למבחן)</string>
     <string name="teacher">מרצה (ניהול כיתות)</string>
     <string name="select_status">בחר את הסטטוס שלך</string>
     <string name="hello">שלום</string>
     <string name="logout">התנתקות</string>
+    <string name="file_not_found">קובץ לא נמצא</string>
+    <string name="delete">מחיקה</string>
+    <string name="edit">עריכה</string>
+    <string name="start_exam">התחלת מבחן</string>
+    <string name="class_id_qr_code">קוד QR של מזהה כיתה</string>
+    <string name="show_class_id">הצג מזהה כיתה</string>
+    <string name="no_files_available">אין קבצים זמינים</string>
+    <string name="add_file">הוסף קובץ</string>
+    <string name="no_classes_available">אין כיתות זמינות</string>
+    <string name="warning_before_join">אזהרה: לאחר הכניסה לבחינה, אינך רשאי לצאת מהאפליקציה או לשנות הרשאות!</string>
+    <string name="scan_qr_code">סרוק קוד QR</string>
+    <string name="enter_code_manually">הזן קוד באופן ידני</string>
+    <string name="class_updated_success">פרטי הכיתה עודכנו בהצלחה</string>
+    <string name="class_saved_success">פרטי הכיתה נשמרו בהצלחה</string>
+    <string name="class_update_failed">נכשל בעדכון פרטי הכיתה</string>
+    <string name="class_save_failed">נכשל בשמירת פרטי הכיתה</string>
+    <string name="teacher_id_not_found">מזהה המורה לא נמצא</string>
+    <string name="hour_formatted">%d שעה</string>
+    <string name="hours_formatted">%d שעות</string>
+    <string name="minute_formatted">%d דקה</string>
+    <string name="minutes_formatted">%d דקות</string>
+    <string name="scan_qr_code_prompt">סרוק קוד QR</string>
+    <string name="enter_class_id">הזן מזהה כיתה</string>
+    <string name="class_id_hint">מזהה כיתה</string>
+    <string name="ok">אישור</string>
+    <string name="cancel">ביטול</string>
+    <string name="please_enter_class_id">הזן בבקשה מזהה כיתה</string>
+    <string name="cancelled">בוטל</string>
+    <string name="class_not_scheduled">כיתה זו אינה מתוזמנת לשעה הנוכחית.</string>
+    <string name="class_id_not_found">מזהה כיתה לא נמצא</string>
+    <string name="failed_to_join_class">נכשל בהצטרפות לכיתה</string>
+    <string name="user_data_not_found">נתוני המשתמש לא נמצאו</string>
+
 </resources>

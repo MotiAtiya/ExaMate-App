@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.examate.databinding.ActivityCreateClassBinding
 import com.example.examate.data.CreateClassRequest
 import com.example.examate.data.EditClassRequest
+import com.example.examate.databinding.ActivityCreateClassBinding
 
 @Suppress("IMPLICIT_CAST_TO_ANY")
 class CreateClassActivity : AppCompatActivity(), TimePickerFragment.TimePickerListener, DatePickerFragment.DatePickerListener,
@@ -51,6 +51,11 @@ class CreateClassActivity : AppCompatActivity(), TimePickerFragment.TimePickerLi
             dialog.show(supportFragmentManager, "MinuteSelectionDialog")
         }
 
+        binding.buttonViewFiles.setOnClickListener {
+            val intent = Intent(this, MyFilesActivity::class.java)
+            startActivity(intent)
+        }
+
         // Check if intent has extra data for editing a class
         intent?.let {
             classId = it.getStringExtra("classId")
@@ -83,7 +88,7 @@ class CreateClassActivity : AppCompatActivity(), TimePickerFragment.TimePickerLi
 
             // Validate input
             if (courseName.isEmpty() || testDate == defaultDate || testStartTime == defaultTime || testTimeHours == null || testTimeMinutes == null) {
-                Toast.makeText(applicationContext, "Please fill in all required fields.", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, R.string.fill_all_fields_message, Toast.LENGTH_LONG).show()
             } else {
                 // Retrieve teacherId from SharedPreferences
                 val sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE)
@@ -120,19 +125,23 @@ class CreateClassActivity : AppCompatActivity(), TimePickerFragment.TimePickerLi
                     NetworkUtils.postRequest(requestEndpoint, requestBody) { jsonElement ->
                         if (jsonElement != null) {
                             Log.d("POST response", jsonElement.toString())
-                            val successMessage = if (isEditMode) "Class details updated successfully" else "Class details saved successfully"
+                            val successMessage = if (isEditMode) R.string.class_updated_success else R.string.class_saved_success
                             Toast.makeText(applicationContext, successMessage, Toast.LENGTH_SHORT).show()
+
+                            val editor = sharedPreferences.edit()
+                            editor.remove("fileNames").apply()
+
                             val intent = Intent(this, TeacherHomeActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {
                             Log.d("POST response", "Failed to get response")
-                            val failureMessage = if (isEditMode) "Failed to update class details" else "Failed to save class details"
+                            val failureMessage = if (isEditMode) R.string.class_update_failed else R.string.class_save_failed
                             Toast.makeText(applicationContext, failureMessage, Toast.LENGTH_SHORT).show()
                         }
                     }
                 } else {
-                    Toast.makeText(applicationContext, "Teacher ID not found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, R.string.teacher_id_not_found, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -150,11 +159,11 @@ class CreateClassActivity : AppCompatActivity(), TimePickerFragment.TimePickerLi
 
     override fun onHourSelected(hour: Int) {
         selectedHour = hour
-        binding.selectHourButton.text = if (hour == 1) "$hour ${getString(R.string.hour)}" else "$hour ${getString(R.string.hours)}"
+        binding.selectHourButton.text = if (hour == 1) getString(R.string.hour_formatted, hour) else getString(R.string.hours_formatted, hour)
     }
 
     override fun onMinuteSelected(minute: Int) {
         selectedMinute = minute
-        binding.selectMinuteButton.text = if (minute == 1) "$minute ${getString(R.string.minute)}" else "$minute ${getString(R.string.minutes)}"
+        binding.selectMinuteButton.text = if (minute == 1) getString(R.string.minute_formatted, minute) else getString(R.string.minutes_formatted, minute)
     }
 }
