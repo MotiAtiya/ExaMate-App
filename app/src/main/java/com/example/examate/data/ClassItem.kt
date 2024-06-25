@@ -5,6 +5,7 @@ import java.util.*
 
 data class ClassItem(
     val classId: String,
+    val disconnectId: String,
     val name: String,
     val openMaterial: Boolean,
     val testDate: String,

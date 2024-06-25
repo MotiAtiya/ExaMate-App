@@ -42,7 +42,7 @@
     <string name="edit">Edit</string>
     <string name="start_exam">Start Exam</string>
     <string name="class_id_qr_code">Class ID QR Code</string>
-    <string name="show_class_id">Show Class ID</string>
+    <string name="show_connect_qr_code">Show Connect QR Code</string>
     <string name="no_files_available">No files available</string>
     <string name="add_file">Add File</string>
     <string name="no_classes_available">No classes available</string>
@@ -69,5 +69,9 @@
     <string name="class_id_not_found">Class ID not found</string>
     <string name="failed_to_join_class">Failed to join class</string>
     <string name="user_data_not_found">User data not found</string>
+    <string name="not_allowed_to_logout">Not allowed to logout</string>
+    <string name="failed_to_logout">Failed to logout</string>
+    <string name="no_students_connected">No students connected</string>
+    <string name="show_disconnect_qr_code">Show Disconnect QR Code</string>
 
 </resources>

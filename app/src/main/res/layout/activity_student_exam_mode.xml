@@ -72,7 +72,7 @@
             android:layout_weight="0" />
 
         <Button
-            android:id="@+id/selectMinuteButton"
+            android:id="@+id/finishButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

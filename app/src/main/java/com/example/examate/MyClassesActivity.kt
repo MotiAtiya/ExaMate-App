@@ -21,7 +21,7 @@ class MyClassesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("MyClassesActivity", "on Create")
+        Log.d("MyClassesActivity", "onCreate")
 
         binding = ActivityMyClassesBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -44,51 +44,56 @@ class MyClassesActivity : AppCompatActivity() {
             binding.progressBar.visibility = android.view.View.VISIBLE
 
             // Prepare the POST request body
-            val requestBody = GetClassesByIdRequest(
-                teacherId = teacherId
-            )
+            val requestBody = GetClassesByIdRequest(teacherId = teacherId)
 
             // Fetch data and update adapter
             NetworkUtils.postRequest("getClassesById", requestBody) { jsonElement ->
                 // Hide loading spinner
-                binding.progressBar.visibility = android.view.View.GONE
+                runOnUiThread {
+                    binding.progressBar.visibility = android.view.View.GONE
+                }
 
                 if (jsonElement != null) {
-                    val classesJsonArray = jsonElement.asJsonObject.getAsJsonArray("classes")
-                    val classesList = mutableListOf<ClassItem>()
-                    classesJsonArray.forEach { jsonElement ->
-                        val classItem = jsonElement.asJsonObject
-                        classesList.add(
-                            ClassItem(
-                                classId = classItem.get("classId").asString,
-                                name = classItem.get("name").asString,
-                                openMaterial = classItem.get("openMaterial").asBoolean,
-                                testDate = classItem.get("testDate").asString,
-                                testStartTime = classItem.get("testStartTime").asString,
-                                testTimeHours = classItem.get("testTimeHours").asInt,
-                                testTimeMinutes = classItem.get("testTimeMinutes").asInt
+                    runOnUiThread {
+                        val classesJsonArray = jsonElement.asJsonObject.getAsJsonArray("classes")
+                        val classesList = mutableListOf<ClassItem>()
+                        classesJsonArray.forEach { jsonElement ->
+                            val classItem = jsonElement.asJsonObject
+                            classesList.add(
+                                ClassItem(
+                                    classId = classItem.get("classId").asString,
+                                    disconnectId = classItem.get("disconnectId").asString,
+                                    name = classItem.get("name").asString,
+                                    openMaterial = classItem.get("openMaterial").asBoolean,
+                                    testDate = classItem.get("testDate").asString,
+                                    testStartTime = classItem.get("testStartTime").asString,
+                                    testTimeHours = classItem.get("testTimeHours").asInt,
+                                    testTimeMinutes = classItem.get("testTimeMinutes").asInt
+                                )
                             )
-                        )
-                    }
+                        }
 
-                    // Sort the list by date and time
-                    classesList.sortBy { it.getParsedDateTime() }
+                        // Sort the list by date and time
+                        classesList.sortBy { it.getParsedDateTime() }
 
-                    // Update adapter with fetched data
-                    classesAdapter.updateClasses(classesList)
+                        // Update adapter with fetched data
+                        classesAdapter.updateClasses(classesList)
 
-                    // Show or hide the empty message based on the list size
-                    if (classesList.isEmpty()) {
-                        binding.recyclerViewClasses.visibility = android.view.View.GONE
-                        binding.emptyTextView.visibility = android.view.View.VISIBLE
-                    } else {
-                        binding.recyclerViewClasses.visibility = android.view.View.VISIBLE
-                        binding.emptyTextView.visibility = android.view.View.GONE
+                        // Show or hide the empty message based on the list size
+                        if (classesList.isEmpty()) {
+                            binding.recyclerViewClasses.visibility = android.view.View.GONE
+                            binding.emptyTextView.visibility = android.view.View.VISIBLE
+                        } else {
+                            binding.recyclerViewClasses.visibility = android.view.View.VISIBLE
+                            binding.emptyTextView.visibility = android.view.View.GONE
+                        }
                     }
                 } else {
                     Log.d("POST response", "Failed to get response")
-                    binding.recyclerViewClasses.visibility = android.view.View.GONE
-                    binding.emptyTextView.visibility = android.view.View.VISIBLE
+                    runOnUiThread {
+                        binding.recyclerViewClasses.visibility = android.view.View.GONE
+                        binding.emptyTextView.visibility = android.view.View.VISIBLE
+                    }
                 }
             }
         } else {
@@ -111,12 +116,16 @@ class MyClassesActivity : AppCompatActivity() {
 
             NetworkUtils.postRequest("deleteClass", requestBody) { jsonElement ->
                 if (jsonElement != null && jsonElement.asJsonObject.get("success").asBoolean) {
-                    Toast.makeText(this, "Class deleted successfully", Toast.LENGTH_SHORT).show()
-                    // Refresh the list after deletion
-                    classesAdapter.updateClasses(classesAdapter.classesList.filter { it.classId != classItem.classId })
-                    checkIfListIsEmpty()
+                    runOnUiThread {
+                        Toast.makeText(this, "Class deleted successfully", Toast.LENGTH_SHORT).show()
+                        // Refresh the list after deletion
+                        classesAdapter.updateClasses(classesAdapter.classesList.filter { it.classId != classItem.classId })
+                        checkIfListIsEmpty()
+                    }
                 } else {
-                    Toast.makeText(this, "Failed to delete class", Toast.LENGTH_SHORT).show()
+                    runOnUiThread {
+                        Toast.makeText(this, "Failed to delete class", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -145,6 +154,7 @@ class MyClassesActivity : AppCompatActivity() {
             val intent = Intent(this, TeacherExamModeActivity::class.java)
             intent.putExtra("className", classItem.name)
             intent.putExtra("classId", classItem.classId)
+            intent.putExtra("disconnectId", classItem.disconnectId)
             startActivity(intent)
         }
     }

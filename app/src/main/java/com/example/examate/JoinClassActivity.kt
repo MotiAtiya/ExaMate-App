@@ -93,18 +93,20 @@ class JoinClassActivity : AppCompatActivity() {
                 if (jsonElement != null && jsonElement.isJsonObject) {
                     val jsonObject = jsonElement.asJsonObject
                     if (jsonObject.has("studentId")) {
+                        val studentId = jsonObject.get("studentId").asString
+                        val editor = sharedPreferences.edit()
+                        editor.putString("StudentId", studentId).apply()
+
                         val classDetails = jsonObject.getAsJsonObject("classDetails")
                         val testDate = classDetails.get("testDate").asString
                         val testStartTime = classDetails.get("testStartTime").asString
                         val testTimeHours = classDetails.get("testTimeHours").asInt
                         val testTimeMinutes = classDetails.get("testTimeMinutes").asInt
                         val className = classDetails.get("name").asString
-                        val isOpenMaterialAllowed = classDetails.get("openMaterial").asBoolean // Add this line
+                        val isOpenMaterialAllowed = classDetails.get("openMaterial").asBoolean
 
                         val currentDateTime = Calendar.getInstance()
                         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-
                         val testDateTime = Calendar.getInstance().apply {
                             time = dateFormat.parse(testDate)
                             val (hours, minutes) = testStartTime.split(":").map { it.toInt() }
@@ -128,10 +130,12 @@ class JoinClassActivity : AppCompatActivity() {
                             val intent = Intent(this, StudentExamModeActivity::class.java).apply {
                                 putExtra("EXAM_NAME", className)
                                 putExtra("REMAINING_TIME_MILLIS", remainingTimeMillis)
-                                putExtra("IS_OPEN_MATERIAL_ALLOWED", isOpenMaterialAllowed) // Add this line
+                                putExtra("IS_OPEN_MATERIAL_ALLOWED", isOpenMaterialAllowed)
+                                putExtra("STUDENT_ID", studentId)
+                                putExtra("CLASS_ID", classId)
                             }
                             startActivity(intent)
-                            finish()  // Close this activity
+                            finish()
                         }
                     } else {
                         Toast.makeText(this, getString(R.string.class_id_not_found), Toast.LENGTH_SHORT).show()

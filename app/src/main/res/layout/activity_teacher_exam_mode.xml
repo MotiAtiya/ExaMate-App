@@ -24,9 +24,28 @@
             android:id="@+id/buttonShowId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/show_class_id"
+            android:text="@string/show_connect_qr_code"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/buttonShowDisconnectId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_disconnect_qr_code"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            android:id="@+id/emptyTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_students_connected"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewStudents"

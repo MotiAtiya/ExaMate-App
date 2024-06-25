@@ -3,16 +3,13 @@ package com.example.examate
 import Student
 import StudentsAdapter
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.examate.databinding.ActivityTeacherExamModeBinding
-import com.example.examate.databinding.ItemStudentBinding
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.google.zxing.qrcode.QRCodeWriter
@@ -20,7 +17,6 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.gson.JsonArray
 
 class TeacherExamModeActivity : AppCompatActivity() {
 
@@ -28,6 +24,7 @@ class TeacherExamModeActivity : AppCompatActivity() {
     private lateinit var studentsAdapter: StudentsAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var classId: String? = null
+    private var disconnectId: String? = null
     private var teacherId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,27 +34,19 @@ class TeacherExamModeActivity : AppCompatActivity() {
 
         val className = intent.getStringExtra("className") ?: ""
         classId = intent.getStringExtra("classId") ?: ""
+        disconnectId = intent.getStringExtra("disconnectId") ?: ""
 
         binding.className.text = className
 
         binding.buttonShowId.setOnClickListener {
-            classId?.let {
-                // Generate QR code
-                val qrCodeBitmap = generateQRCode(it)
+            classId?.let { id ->
+                showQRCodeDialog(id)
+            }
+        }
 
-                // Show dialog with QR code
-                val imageView = ImageView(this)
-                imageView.setImageBitmap(qrCodeBitmap)
-
-                val customTitle = LayoutInflater.from(this).inflate(R.layout.dialog_title_centered, null) as TextView
-
-                AlertDialog.Builder(this)
-                    .setCustomTitle(customTitle)
-                    .setView(imageView)
-                    .setPositiveButton("Close") { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .show()
+        binding.buttonShowDisconnectId.setOnClickListener {
+            disconnectId?.let { id ->
+                showQRCodeDialog(id)
             }
         }
 
@@ -99,20 +88,36 @@ class TeacherExamModeActivity : AppCompatActivity() {
         }
     }
 
+    private fun showQRCodeDialog(id: String) {
+        val qrCodeBitmap = generateQRCode(id)
+        val imageView = ImageView(this)
+        imageView.setImageBitmap(qrCodeBitmap)
+
+        val customTitle = LayoutInflater.from(this).inflate(R.layout.dialog_title_centered, null) as TextView
+
+        AlertDialog.Builder(this)
+            .setCustomTitle(customTitle)
+            .setView(imageView)
+            .setPositiveButton("Close") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
     private fun loadConnectedStudents() {
         val requestBody = mapOf(
-            "classId" to classId/*,
-            "teacherId" to teacherId*/
+            "classId" to classId,
+            "teacherId" to teacherId
         )
-        NetworkUtils.postRequest("getAllStudentsByClass" /*"getConnectedStudent"*/, requestBody) { jsonElement ->
-//            runOnUiThread {
+        NetworkUtils.postRequest("getConnectedStudents", requestBody) { jsonElement ->
+            runOnUiThread {
                 swipeRefreshLayout.isRefreshing = false
-                if (jsonElement != null && jsonElement.isJsonArray) {
-                    val studentsJsonArray = jsonElement.asJsonArray
-                    val students = mutableListOf<Student>()
+                if (jsonElement != null) {
+                    val studentsJsonArray = jsonElement.asJsonObject.getAsJsonArray("students")
+                    val studentsList = mutableListOf<Student>()
                     studentsJsonArray.forEach { jsonElement ->
                         val studentObject = jsonElement.asJsonObject
-                        students.add(
+                        studentsList.add(
                             Student(
                                 firstName = studentObject.get("firstName").asString,
                                 lastName = studentObject.get("lastName").asString,
@@ -120,11 +125,14 @@ class TeacherExamModeActivity : AppCompatActivity() {
                             )
                         )
                     }
-                    studentsAdapter.updateStudents(students)
+                    // Update adapter with fetched data
+                    studentsAdapter.updateStudents(studentsList)
+                    binding.emptyTextView.visibility = if (studentsList.isEmpty()) android.view.View.VISIBLE else android.view.View.GONE
                 } else {
+                    binding.emptyTextView.visibility = android.view.View.VISIBLE
                     Toast.makeText(this, "Failed to load students", Toast.LENGTH_SHORT).show()
                 }
             }
-//        }
+        }
     }
 }

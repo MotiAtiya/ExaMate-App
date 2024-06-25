@@ -1,12 +1,13 @@
 package com.example.examate
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.examate.databinding.ActivityStudentExamModeBinding
+import com.google.zxing.integration.android.IntentIntegrator
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -17,6 +18,8 @@ class StudentExamModeActivity : AppCompatActivity() {
     private var timerRunning = false
     private var initialTimeMillis: Long = 600000 // Default timer duration in milliseconds (10 minutes)
     private var isOpenMaterialAllowed = false
+    private var studentId: String? = null
+    private var classId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +31,8 @@ class StudentExamModeActivity : AppCompatActivity() {
         val className = intent.getStringExtra("EXAM_NAME")
         val remainingTimeMillis = intent.getLongExtra("REMAINING_TIME_MILLIS", 600000)
         isOpenMaterialAllowed = intent.getBooleanExtra("IS_OPEN_MATERIAL_ALLOWED", false)
+        studentId = intent.getStringExtra("STUDENT_ID")
+        classId = intent.getStringExtra("CLASS_ID")
 
         binding.textView6.text = className
         initialTimeMillis = remainingTimeMillis
@@ -47,7 +52,56 @@ class StudentExamModeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.finishButton.setOnClickListener {
+            startQrCodeScanner()
+        }
+
         startTimer()
+    }
+
+    private fun startQrCodeScanner() {
+        val integrator = IntentIntegrator(this)
+        integrator.setOrientationLocked(false)
+        integrator.setPrompt(getString(R.string.scan_qr_code_prompt))
+        integrator.initiateScan()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents == null) {
+                Toast.makeText(this, getString(R.string.cancelled), Toast.LENGTH_LONG).show()
+            } else {
+                val disconnectId = result.contents
+                logoutClass(disconnectId)
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    private fun logoutClass(disconnectId: String) {
+
+        val requestBody = mapOf(
+            "classId" to classId,
+            "disconnectId" to disconnectId,
+            "studentId" to studentId
+        )
+
+        NetworkUtils.postRequest("disconnectClass", requestBody) { jsonElement ->
+            if (jsonElement != null && jsonElement.isJsonObject) {
+                val jsonObject = jsonElement.asJsonObject
+                if (jsonObject.get("success").asBoolean) {
+                    val intent = Intent(this, StudentHomeActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(this, getString(R.string.not_allowed_to_logout), Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, getString(R.string.failed_to_logout), Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun startTimer() {
@@ -63,9 +117,9 @@ class StudentExamModeActivity : AppCompatActivity() {
                 timerRunning = false
                 Toast.makeText(this@StudentExamModeActivity, "Time's up!", Toast.LENGTH_LONG).show()
 
-                // Start HomeActivity using this@ExamModeActivity as the context
                 val intent = Intent(this@StudentExamModeActivity, StudentHomeActivity::class.java)
                 startActivity(intent)
+                finish()
             }
         }
 
