@@ -114,13 +114,31 @@ class MyClassesActivity : AppCompatActivity() {
             Log.d("teacherId: ", teacherId)
             Log.d("classId: ", classItem.classId)
 
+            // Show loading spinner and disable interactions
+            runOnUiThread {
+                binding.progressBar.visibility = android.view.View.VISIBLE
+                binding.recyclerViewClasses.isEnabled = false
+            }
+
             NetworkUtils.postRequest("deleteClass", requestBody) { jsonElement ->
-                if (jsonElement != null && jsonElement.asJsonObject.get("success").asBoolean) {
-                    runOnUiThread {
-                        Toast.makeText(this, "Class deleted successfully", Toast.LENGTH_SHORT).show()
-                        // Refresh the list after deletion
-                        classesAdapter.updateClasses(classesAdapter.classesList.filter { it.classId != classItem.classId })
-                        checkIfListIsEmpty()
+                runOnUiThread {
+                    binding.progressBar.visibility = android.view.View.GONE
+                    binding.recyclerViewClasses.isEnabled = true
+                }
+
+                if (jsonElement != null) {
+                    val responseMessage = jsonElement.asString
+                    if (responseMessage == "Class deleted successfully.") {
+                        runOnUiThread {
+                            Toast.makeText(this, "Class deleted successfully", Toast.LENGTH_SHORT).show()
+                            // Refresh the list after deletion
+                            classesAdapter.updateClasses(classesAdapter.classesList.filter { it.classId != classItem.classId })
+                            checkIfListIsEmpty()
+                        }
+                    } else {
+                        runOnUiThread {
+                            Toast.makeText(this, "Failed to delete class", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 } else {
                     runOnUiThread {

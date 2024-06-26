@@ -22,8 +22,10 @@ class JoinClassActivity : AppCompatActivity() {
         binding = ActivityJoinClassBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.buttonSubmit.setOnClickListener {
-            startQrCodeScanner()
+        binding.buttonScanQR.setOnClickListener {
+            PermissionUtils.checkDoNotDisturbPermission(this) {
+                startQrCodeScanner()
+            }
         }
 
         binding.buttonEnterId.setOnClickListener {

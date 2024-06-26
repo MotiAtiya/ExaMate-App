@@ -73,5 +73,8 @@
     <string name="failed_to_logout">נכשל בהתנתקות</string>
     <string name="no_students_connected">אין תלמידים מחוברים</string>
     <string name="show_disconnect_qr_code">הצג QR להתנתקות</string>
-
+    <string name="permission_required">Permission required</string>
+    <string name="dnd_permission_required">DND permission required</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="permission_needed_to_proceed">Permission needed to proceed</string>
 </resources>

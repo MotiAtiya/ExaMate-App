@@ -73,5 +73,12 @@
     <string name="failed_to_logout">Failed to logout</string>
     <string name="no_students_connected">No students connected</string>
     <string name="show_disconnect_qr_code">Show Disconnect QR Code</string>
+    <string name="permission_required">Permission required</string>
+    <string name="dnd_permission_required">DND permission required</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="permission_needed_to_proceed">Permission needed to proceed</string>
+    <string name="dnd_enabled">dnd_enabled</string>
+    <string name="dnd_disabled">dnd_disabled</string>
+    <string name="dnd_enable_required">dnd_enable_required</string>
 
 </resources>

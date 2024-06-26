@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.examate.data.CreateClassRequest
@@ -121,23 +122,31 @@ class CreateClassActivity : AppCompatActivity(), TimePickerFragment.TimePickerLi
                     val requestEndpoint = if (isEditMode) "editClass" else "createNewClass"
                     Log.d("POST request", requestBody.toString())
 
+                    // Show the loading overlay
+                    binding.progressOverlay.visibility = View.VISIBLE
+
                     // Make the POST request
                     NetworkUtils.postRequest(requestEndpoint, requestBody) { jsonElement ->
-                        if (jsonElement != null) {
-                            Log.d("POST response", jsonElement.toString())
-                            val successMessage = if (isEditMode) R.string.class_updated_success else R.string.class_saved_success
-                            Toast.makeText(applicationContext, successMessage, Toast.LENGTH_SHORT).show()
+                        runOnUiThread {
+                            // Hide the loading overlay
+                            binding.progressOverlay.visibility = View.GONE
 
-                            val editor = sharedPreferences.edit()
-                            editor.remove("fileNames").apply()
+                            if (jsonElement != null) {
+                                Log.d("POST response", jsonElement.toString())
+                                val successMessage = if (isEditMode) R.string.class_updated_success else R.string.class_saved_success
+                                Toast.makeText(applicationContext, successMessage, Toast.LENGTH_SHORT).show()
 
-                            val intent = Intent(this, TeacherHomeActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            Log.d("POST response", "Failed to get response")
-                            val failureMessage = if (isEditMode) R.string.class_update_failed else R.string.class_save_failed
-                            Toast.makeText(applicationContext, failureMessage, Toast.LENGTH_SHORT).show()
+                                val editor = sharedPreferences.edit()
+                                editor.remove("fileNames").apply()
+
+                                val intent = Intent(this, TeacherHomeActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            } else {
+                                Log.d("POST response", "Failed to get response")
+                                val failureMessage = if (isEditMode) R.string.class_update_failed else R.string.class_save_failed
+                                Toast.makeText(applicationContext, failureMessage, Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 } else {
