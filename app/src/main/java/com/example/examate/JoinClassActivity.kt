@@ -1,5 +1,6 @@
 package com.example.examate
 
+import PermissionUtils
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -24,12 +25,14 @@ class JoinClassActivity : AppCompatActivity() {
 
         binding.buttonScanQR.setOnClickListener {
             PermissionUtils.checkDoNotDisturbPermission(this) {
-                startQrCodeScanner()
+                startQrCodeScanner();
             }
         }
 
         binding.buttonEnterId.setOnClickListener {
-            showEnterClassIdDialog()
+            PermissionUtils.checkDoNotDisturbPermission(this) {
+                showEnterClassIdDialog()
+            }
         }
     }
 

@@ -36,7 +36,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <service android:name=".OverlayService" android:exported="true"/>
 
         <activity
             android:name=".MainActivity"
