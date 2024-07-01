@@ -1,0 +1,98 @@
+[debug] [2024-06-30T14:22:09.757Z] ----------------------------------------------------------------------
+[debug] [2024-06-30T14:22:09.758Z] Command:       /Users/moti/.nvm/versions/node/v20.5.0/bin/node /Users/moti/.nvm/versions/node/v20.5.0/bin/firebase emulators:start
+[debug] [2024-06-30T14:22:09.759Z] CLI Version:   13.12.0
+[debug] [2024-06-30T14:22:09.759Z] Platform:      darwin
+[debug] [2024-06-30T14:22:09.759Z] Node Version:  v20.5.0
+[debug] [2024-06-30T14:22:09.759Z] Time:          Sun Jun 30 2024 17:22:09 GMT+0300 (Israel Daylight Time)
+[debug] [2024-06-30T14:22:09.759Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-06-30T14:22:09.814Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-06-30T14:22:09.814Z] > authorizing via signed-in user (a.moti96@gmail.com)
+[info] i  emulators: Starting emulators: functions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions"}}
+[debug] [2024-06-30T14:22:10.042Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-06-30T14:22:10.042Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2024-06-30T14:22:10.045Z] [hub] writing locator at /var/folders/tx/s35lk1_94wd_6g836wy76shr0000gn/T/hub-exammate-6aebc.json
+[debug] [2024-06-30T14:22:10.191Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-06-30T14:22:10.191Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-06-30T14:22:10.191Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: auth, firestore, database, hosting, pubsub, storage, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mauth, firestore, database, hosting, pubsub, storage, dataconnect\u001b[22m"}}
+[debug] [2024-06-30T14:22:10.193Z] defaultcredentials: writing to file /Users/moti/.config/firebase/a_moti96_gmail.com_application_default_credentials.json
+[debug] [2024-06-30T14:22:10.197Z] Setting GAC to /Users/moti/.config/firebase/a_moti96_gmail.com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /Users/moti/.config/firebase/a_moti96_gmail.com_application_default_credentials.json"}}
+[debug] [2024-06-30T14:22:10.198Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/exammate-6aebc/adminSdkConfig [none]
+[debug] [2024-06-30T14:22:10.987Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/exammate-6aebc/adminSdkConfig 200
+[debug] [2024-06-30T14:22:10.987Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/exammate-6aebc/adminSdkConfig {"projectId":"exammate-6aebc","storageBucket":"exammate-6aebc.appspot.com","locationId":"us-central"}
+[debug] [2024-06-30T14:22:11.007Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-06-30T14:22:11.008Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2024-06-30T14:22:11.008Z] Starting Emulator UI with command {"binary":"node","args":["/Users/moti/.cache/firebase/emulators/ui-v1.12.1/server/server.mjs"],"optionalArgs":[],"joinArgs":false,"shell":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/Users/moti/.cache/firebase/emulators/ui-v1.12.1/server/server.mjs\"],\"optionalArgs\":[],\"joinArgs\":false,\"shell\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2024-06-30T14:22:11.085Z] Web / API server started at 127.0.0.1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
+[debug] [2024-06-30T14:22:11.085Z] Web / API server started at ::1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
+[info] i  functions: Watching "/Users/moti/AndroidStudioProjects/exaMate/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/moti/AndroidStudioProjects/exaMate/functions\" for Cloud Functions..."}}
+[debug] [2024-06-30T14:22:11.218Z] Validating nodejs source
+[debug] [2024-06-30T14:22:12.609Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-06-30T14:22:12.609Z] Building nodejs source
+[debug] [2024-06-30T14:22:12.610Z] Failed to find version of module node: reached end of search path /Users/moti/AndroidStudioProjects/exaMate/functions/node_modules
+[info] ✔  functions: Using node@20 from host. 
+[debug] [2024-06-30T14:22:12.611Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-06-30T14:22:12.616Z] Found firebase-functions binary at '/Users/moti/AndroidStudioProjects/exaMate/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8659
+
+[debug] [2024-06-30T14:22:12.830Z] Got response from /__/functions.yaml {"endpoints":{},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] ✔  functions: Loaded functions definitions from source: . {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: ."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port      │ View in Emulator UI             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Functions │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions │
+└───────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2024-06-30T14:44:56.091Z] FetchError: request to http://127.0.0.1:4400/emulators failed, reason: read ECONNRESET
+    at ClientRequest.<anonymous> (file:///Users/moti/.cache/firebase/emulators/ui-v1.12.1/server/server.mjs:40457:14)
+    at ClientRequest.emit (node:events:514:28)
+    at Socket.socketErrorListener (node:_http_client:495:9)
+    at Socket.emit (node:events:514:28)
+    at emitErrorNT (node:internal/streams/destroy:151:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:116:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  type: 'system',
+  errno: 'ECONNRESET',
+  code: 'ECONNRESET',
+  erroredSysCall: 'read'
+}
+ {"metadata":{"emulator":{"name":"ui"},"message":"FetchError: request to http://127.0.0.1:4400/emulators failed, reason: read ECONNRESET\n    at ClientRequest.<anonymous> (file:///Users/moti/.cache/firebase/emulators/ui-v1.12.1/server/server.mjs:40457:14)\n    at ClientRequest.emit (node:events:514:28)\n    at Socket.socketErrorListener (node:_http_client:495:9)\n    at Socket.emit (node:events:514:28)\n    at emitErrorNT (node:internal/streams/destroy:151:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:116:3)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {\n  type: 'system',\n  errno: 'ECONNRESET',\n  code: 'ECONNRESET',\n  erroredSysCall: 'read'\n}\n"}}

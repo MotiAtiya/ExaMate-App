@@ -1,5 +1,6 @@
 package com.example.examate
 
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,9 +9,12 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import com.example.examate.databinding.ActivityStudentExamModeBinding
-import com.google.zxing.integration.android.IntentIntegrator
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -25,6 +29,9 @@ class StudentExamModeActivity : AppCompatActivity() {
     private var classId: String? = null
     private var isScanningQrCode = false
     private var isFinishingActivity = false
+    private var firstLoadFiles = true
+
+    private lateinit var qrCodeScannerLauncher: ActivityResultLauncher<ScanOptions>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,14 +40,18 @@ class StudentExamModeActivity : AppCompatActivity() {
         binding = ActivityStudentExamModeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val className = intent.getStringExtra("EXAM_NAME")
-        val remainingTimeMillis = intent.getLongExtra("REMAINING_TIME_MILLIS", 600000)
-        isOpenMaterialAllowed = intent.getBooleanExtra("IS_OPEN_MATERIAL_ALLOWED", false)
-        studentId = intent.getStringExtra("STUDENT_ID")
-        classId = intent.getStringExtra("CLASS_ID")
+        qrCodeScannerLauncher = registerForActivityResult(ScanContract()) { result ->
+            isScanningQrCode = false
+            if (result.contents == null) {
+                Toast.makeText(this, getString(R.string.cancelled), Toast.LENGTH_LONG).show()
+                disableSystemUI()
+            } else {
+                val disconnectId = result.contents
+                logoutClass(disconnectId)
+            }
+        }
 
-        binding.textView6.text = className
-        initialTimeMillis = remainingTimeMillis
+        handleIntent(intent)
 
         val progressBar = binding.progressBarCircle
         if (Locale.getDefault().language == "en") {
@@ -53,8 +64,11 @@ class StudentExamModeActivity : AppCompatActivity() {
         binding.viewFilesButton.setOnClickListener {
             val intent = Intent(this, ExamFilesActivity::class.java).apply {
                 putExtra("IS_OPEN_MATERIAL_ALLOWED", isOpenMaterialAllowed)
+                putExtra("CLASS_ID", classId)
+                putExtra("FIRST_LOAD_FILES", firstLoadFiles)
             }
             startActivity(intent)
+            firstLoadFiles = false
         }
 
         binding.finishButton.setOnClickListener {
@@ -67,29 +81,23 @@ class StudentExamModeActivity : AppCompatActivity() {
         disableSystemUI()
     }
 
-    private fun startQrCodeScanner() {
-        isScanningQrCode = true
-        enableSystemUI() // Ensure the system UI is enabled before starting the QR code scanner
-        val integrator = IntentIntegrator(this)
-        integrator.setOrientationLocked(false)
-        integrator.setPrompt(getString(R.string.scan_qr_code_prompt))
-        integrator.initiateScan()
+    private fun handleIntent(intent: Intent) {
+        val className = intent.getStringExtra("EXAM_NAME")
+        initialTimeMillis = intent.getLongExtra("REMAINING_TIME_MILLIS", 600000)
+        isOpenMaterialAllowed = intent.getBooleanExtra("IS_OPEN_MATERIAL_ALLOWED", false)
+        studentId = intent.getStringExtra("STUDENT_ID")
+        classId = intent.getStringExtra("CLASS_ID")
+
+        binding.textView6.text = className
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null) {
-            isScanningQrCode = false
-            if (result.contents == null) {
-                Toast.makeText(this, getString(R.string.cancelled), Toast.LENGTH_LONG).show()
-                disableSystemUI() // Re-disable the system UI after cancelling
-            } else {
-                val disconnectId = result.contents
-                logoutClass(disconnectId)
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
+    private fun startQrCodeScanner() {
+        isScanningQrCode = true
+        val options = ScanOptions().apply {
+            setOrientationLocked(false)
+            setPrompt(getString(R.string.scan_qr_code_prompt))
         }
+        qrCodeScannerLauncher.launch(options)
     }
 
     private fun logoutClass(disconnectId: String) {
@@ -130,6 +138,7 @@ class StudentExamModeActivity : AppCompatActivity() {
             override fun onTick(millisUntilFinished: Long) {
                 updateTimerText(millisUntilFinished)
                 updateProgressBar(millisUntilFinished)
+                initialTimeMillis -= 1000
             }
 
             override fun onFinish() {
@@ -165,6 +174,7 @@ class StudentExamModeActivity : AppCompatActivity() {
         binding.progressBarCircle.progress = progress
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         // Prevent back navigation
@@ -173,18 +183,31 @@ class StudentExamModeActivity : AppCompatActivity() {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (!hasFocus && !isScanningQrCode && !isFinishingActivity) {
-            val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as android.app.ActivityManager
+            val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
             val runningTasks = activityManager.appTasks
             if (runningTasks.isNotEmpty()) {
                 val topActivity = runningTasks[0].taskInfo.topActivity
                 if (topActivity?.className != ExamFilesActivity::class.java.name &&
-                    topActivity?.className != IntentIntegrator::class.java.name) {
+                    topActivity?.className != ScanOptions::class.java.name) {
                     // Bring the activity back to the front if the user tries to navigate away
                     val intent = Intent(this, StudentExamModeActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    intent.putExtra("EXAM_NAME", binding.textView6.text.toString())
+                    intent.putExtra("REMAINING_TIME_MILLIS", initialTimeMillis)
+                    intent.putExtra("IS_OPEN_MATERIAL_ALLOWED", isOpenMaterialAllowed)
+                    intent.putExtra("STUDENT_ID", studentId)
+                    intent.putExtra("CLASS_ID", classId)
                     startActivity(intent)
                 }
             }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.d("ExamModeActivity", "onNewIntent called")
+        intent?.let {
+            handleIntent(it)
         }
     }
 

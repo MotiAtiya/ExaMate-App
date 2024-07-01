@@ -77,4 +77,7 @@
     <string name="dnd_permission_required">הפעל מצב נא לא להפריע\nהגדרות -> התראות -> נא לא להפריע -> הפעלה</string>
     <string name="go_to_settings">עבור להגדרות התראות</string>
     <string name="permission_needed_to_proceed">נדרש אישור כדי להמשיך</string>
+    <string name="update_files">עדכון קבצים</string>
+    <string name="upload_files">העלאת קבצים</string>
+
 </resources>

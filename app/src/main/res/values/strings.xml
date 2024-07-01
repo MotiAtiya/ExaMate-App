@@ -77,5 +77,7 @@
     <string name="dnd_permission_required">Do Not Disturb permission required\nSettings -> Notifications -> Do Not Disturb -> Turn on</string>
     <string name="go_to_settings">Go to notifications settings</string>
     <string name="permission_needed_to_proceed">Permission needed to proceed</string>
+    <string name="update_files">Update Files</string>
+    <string name="upload_files">Upload Files</string>
 
 </resources>

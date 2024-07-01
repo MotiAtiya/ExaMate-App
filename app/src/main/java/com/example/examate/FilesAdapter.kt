@@ -1,4 +1,7 @@
+package com.example.examate
+
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.examate.databinding.ItemFileBinding
@@ -6,7 +9,7 @@ import com.example.examate.databinding.ItemFileBinding
 class FilesAdapter(
     private var files: List<String>,
     private val itemClick: (String) -> Unit,
-    private val itemDelete: (String) -> Unit
+    private val itemDelete: ((String) -> Unit)?
 ) : RecyclerView.Adapter<FilesAdapter.FileViewHolder>() {
 
     inner class FileViewHolder(val binding: ItemFileBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -15,8 +18,13 @@ class FilesAdapter(
             binding.root.setOnClickListener {
                 itemClick(file)
             }
-            binding.deleteIcon.setOnClickListener {
-                itemDelete(file)
+            if (itemDelete == null) {
+                binding.deleteIcon.visibility = View.GONE
+            } else {
+                binding.deleteIcon.visibility = View.VISIBLE
+                binding.deleteIcon.setOnClickListener {
+                    itemDelete?.let { it1 -> it1(file) }
+                }
             }
         }
     }

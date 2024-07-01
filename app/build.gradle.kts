@@ -11,8 +11,6 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
-
-
     }
 
     defaultConfig {
@@ -21,36 +19,46 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    packaging {
+        resources {
+            excludes += "META-INF/DEPENDENCIES"
+        }
     }
 }
 
 dependencies {
-    implementation(platform("com.google.firebase:firebase-bom:31.1.0")) // Specify the latest Firebase BoM version
+    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-functions")
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-messaging")
+    implementation("com.google.firebase:firebase-storage:21.0.0")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -68,4 +76,6 @@ dependencies {
     implementation("com.google.zxing:core:3.5.3")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation(libs.androidx.swiperefreshlayout)
+
+    implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.3")
 }

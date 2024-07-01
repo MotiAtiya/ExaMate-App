@@ -1,9 +1,10 @@
+package com.example.examate
+
 import android.content.Intent
 import android.provider.Settings
 import android.app.Activity
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.example.examate.R
 
 object PermissionUtils {
     fun checkDoNotDisturbPermission(activity: Activity, onPermissionGranted: () -> Unit) {

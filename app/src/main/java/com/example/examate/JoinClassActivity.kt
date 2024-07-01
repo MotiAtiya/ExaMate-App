@@ -1,6 +1,5 @@
 package com.example.examate
 
-import PermissionUtils
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -11,12 +10,22 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.examate.data.JoinClassRequest
 import com.example.examate.databinding.ActivityJoinClassBinding
-import com.google.zxing.integration.android.IntentIntegrator
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import java.text.SimpleDateFormat
 import java.util.*
 
 class JoinClassActivity : AppCompatActivity() {
     private lateinit var binding: ActivityJoinClassBinding
+
+    private val barcodeLauncher = registerForActivityResult(ScanContract()) { result ->
+        if (result.contents != null) {
+            val classId = result.contents
+            joinClass(classId)
+        } else {
+            Toast.makeText(this, getString(R.string.cancelled), Toast.LENGTH_LONG).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +34,7 @@ class JoinClassActivity : AppCompatActivity() {
 
         binding.buttonScanQR.setOnClickListener {
             PermissionUtils.checkDoNotDisturbPermission(this) {
-                startQrCodeScanner();
+                startQrCodeScanner()
             }
         }
 
@@ -37,10 +46,11 @@ class JoinClassActivity : AppCompatActivity() {
     }
 
     private fun startQrCodeScanner() {
-        val integrator = IntentIntegrator(this)
-        integrator.setOrientationLocked(false)
-        integrator.setPrompt(getString(R.string.scan_qr_code_prompt))
-        integrator.initiateScan()
+        val options = ScanOptions().apply {
+            setOrientationLocked(false)
+            setPrompt(getString(R.string.scan_qr_code_prompt))
+        }
+        barcodeLauncher.launch(options)
     }
 
     private fun showEnterClassIdDialog() {
@@ -51,7 +61,7 @@ class JoinClassActivity : AppCompatActivity() {
         input.hint = getString(R.string.class_id_hint)
         builder.setView(input)
 
-        builder.setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+        builder.setPositiveButton(getString(R.string.ok)) { _, _ ->
             val classId = input.text.toString()
             if (classId.isEmpty()) {
                 Toast.makeText(this, getString(R.string.please_enter_class_id), Toast.LENGTH_SHORT).show()
@@ -64,20 +74,6 @@ class JoinClassActivity : AppCompatActivity() {
         }
 
         builder.show()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null) {
-            if (result.contents == null) {
-                Toast.makeText(this, getString(R.string.cancelled), Toast.LENGTH_LONG).show()
-            } else {
-                val classId = result.contents
-                joinClass(classId)
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
     }
 
     private fun joinClass(classId: String) {
@@ -113,7 +109,7 @@ class JoinClassActivity : AppCompatActivity() {
                         val currentDateTime = Calendar.getInstance()
                         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                         val testDateTime = Calendar.getInstance().apply {
-                            time = dateFormat.parse(testDate)
+                            time = dateFormat.parse(testDate)!!
                             val (hours, minutes) = testStartTime.split(":").map { it.toInt() }
                             set(Calendar.HOUR_OF_DAY, hours)
                             set(Calendar.MINUTE, minutes)

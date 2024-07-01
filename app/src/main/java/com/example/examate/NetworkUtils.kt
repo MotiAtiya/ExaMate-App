@@ -2,9 +2,7 @@ package com.example.examate
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
-import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -12,9 +10,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.Multipart
 import retrofit2.http.POST
-import retrofit2.http.Part
 import retrofit2.http.Url
 import java.security.cert.CertificateException
 import javax.net.ssl.HostnameVerifier
@@ -96,24 +92,8 @@ object NetworkUtils {
         })
     }
 
-    fun uploadFile(relativeUrl: String, filePart: MultipartBody.Part, callback: (ResponseBody?) -> Unit) {
-        apiService.uploadFile(relativeUrl, filePart).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                callback(response.body())
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                callback(null)
-            }
-        })
-    }
-
     private interface ApiService {
         @POST
         fun postRequest(@Url url: String, @Body body: Any): Call<ResponseBody>
-
-        @Multipart
-        @POST
-        fun uploadFile(@Url url: String, @Part file: MultipartBody.Part): Call<ResponseBody>
     }
 }

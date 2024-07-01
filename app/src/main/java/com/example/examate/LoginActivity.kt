@@ -7,8 +7,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.examate.databinding.ActivityLoginBinding
-import java.security.MessageDigest
-import java.util.*
 
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding

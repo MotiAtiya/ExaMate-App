@@ -6,37 +6,30 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.examate.databinding.ActivityMyFilesBinding
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.example.examate.databinding.ActivityUploadFilesBinding
 import java.io.File
 import java.io.FileOutputStream
 
-class MyFilesActivity : AppCompatActivity() {
+class UploadFilesActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMyFilesBinding
+    private lateinit var binding: ActivityUploadFilesBinding
     private lateinit var filesAdapter: FilesAdapter
     private lateinit var sharedPreferences: android.content.SharedPreferences
-    private lateinit var classId: String
-    private var isEditMode = false
     private val localFiles = mutableListOf<File>()
 
     private lateinit var selectFileLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMyFilesBinding.inflate(layoutInflater)
+        binding = ActivityUploadFilesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE)
-        classId = intent.getStringExtra("classId") ?: ""
-        isEditMode = intent.getBooleanExtra("isEditMode", false)
 
         // Initialize RecyclerView and set empty adapter initially
         binding.recyclerViewFiles.layoutManager = LinearLayoutManager(this)
@@ -56,13 +49,8 @@ class MyFilesActivity : AppCompatActivity() {
             }
         }
 
-        if (isEditMode) {
-            // Load existing files for the class
-            loadClassFiles(classId)
-        } else {
-            // Load local files
-            loadLocalFiles()
-        }
+        // Load local files
+        loadLocalFiles()
     }
 
     private fun selectFile() {
@@ -71,26 +59,6 @@ class MyFilesActivity : AppCompatActivity() {
             type = "application/pdf"
         }
         selectFileLauncher.launch(intent)
-    }
-
-    private fun loadClassFiles(classId: String) {
-        val firestore = Firebase.firestore
-        val classDocRef = firestore.collection("classes").document(classId)
-
-        classDocRef.collection("files").get()
-            .addOnSuccessListener { documents ->
-                val fileList = mutableListOf<String>()
-                for (document in documents) {
-                    val fileName = document.getString("fileName")
-                    fileName?.let { fileList.add(it) }
-                }
-                // Update your UI with the file list
-                filesAdapter.updateFiles(fileList)
-                binding.emptyTextView.visibility = if (fileList.isEmpty()) android.view.View.VISIBLE else android.view.View.GONE
-            }
-            .addOnFailureListener { exception ->
-                Log.e("Firestore", "Error getting documents: ", exception)
-            }
     }
 
     private fun loadLocalFiles() {
@@ -112,8 +80,12 @@ class MyFilesActivity : AppCompatActivity() {
 
             // Update local files list
             localFiles.add(destinationFile)
+
+            // Update shared preferences with the new file name and URI
             val fileNames = localFiles.map { it.name }.toSet()
-            sharedPreferences.edit().putStringSet("fileNames", fileNames).apply()
+            val fileUris = sharedPreferences.getStringSet("fileUris", mutableSetOf())?.toMutableSet() ?: mutableSetOf()
+            fileUris.add("$fileName,$uri")
+            sharedPreferences.edit().putStringSet("fileNames", fileNames).putStringSet("fileUris", fileUris).apply()
 
             // Refresh file list
             filesAdapter.updateFiles(fileNames.toList())
@@ -140,12 +112,11 @@ class MyFilesActivity : AppCompatActivity() {
         val file = File(filesDir, fileName)
         if (file.exists()) {
             val intent = Intent(this, PdfViewerActivity::class.java).apply {
-                putExtra("PDF_FILE_NAME", fileName)
+                putExtra("PDF_FILE_PATH", file.absolutePath)
             }
             startActivity(intent)
         } else {
             Toast.makeText(this, "File not found", Toast.LENGTH_SHORT).show()
-            Log.e("MyFilesActivity", "File not found: $fileName")
         }
     }
 
@@ -158,14 +129,16 @@ class MyFilesActivity : AppCompatActivity() {
         // Update local files list
         localFiles.removeIf { it.name == fileName }
         val fileNames = localFiles.map { it.name }.toSet()
-        sharedPreferences.edit().putStringSet("fileNames", fileNames).apply()
+        val fileUris = sharedPreferences.getStringSet("fileUris", mutableSetOf())?.toMutableSet() ?: mutableSetOf()
+        fileUris.removeIf { it.startsWith("$fileName,") }
+        sharedPreferences.edit().putStringSet("fileNames", fileNames).putStringSet("fileUris", fileUris).apply()
 
         // Refresh file list
         filesAdapter.updateFiles(fileNames.toList())
         binding.emptyTextView.visibility = if (fileNames.isEmpty()) android.view.View.VISIBLE else android.view.View.GONE
     }
 
-    fun getSelectedFiles(): List<String> {
+    private fun getSelectedFiles(): List<String> {
         return localFiles.map { it.absolutePath }
     }
 
@@ -176,9 +149,5 @@ class MyFilesActivity : AppCompatActivity() {
         }
         setResult(Activity.RESULT_OK, data)
         finish()
-    }
-
-    companion object {
-        private const val REQUEST_CODE_SELECT_FILE = 1
     }
 }

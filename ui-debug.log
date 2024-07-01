@@ -1,0 +1,15 @@
+Web / API server started at 127.0.0.1:4000
+Web / API server started at ::1:4000
+FetchError: request to http://127.0.0.1:4400/emulators failed, reason: read ECONNRESET
+    at ClientRequest.<anonymous> (file:///Users/moti/.cache/firebase/emulators/ui-v1.12.1/server/server.mjs:40457:14)
+    at ClientRequest.emit (node:events:514:28)
+    at Socket.socketErrorListener (node:_http_client:495:9)
+    at Socket.emit (node:events:514:28)
+    at emitErrorNT (node:internal/streams/destroy:151:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:116:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  type: 'system',
+  errno: 'ECONNRESET',
+  code: 'ECONNRESET',
+  erroredSysCall: 'read'
+}

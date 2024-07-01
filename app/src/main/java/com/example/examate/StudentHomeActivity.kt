@@ -24,7 +24,7 @@ class StudentHomeActivity : AppCompatActivity() {
         }
 
         binding.buttonMyFiles.setOnClickListener {
-            val intent = Intent(this, MyFilesActivity::class.java)
+            val intent = Intent(this, StudentFilesActivity::class.java)
             startActivity(intent)
         }
 
