@@ -79,5 +79,14 @@
     <string name="permission_needed_to_proceed">נדרש אישור כדי להמשיך</string>
     <string name="update_files">עדכון קבצים</string>
     <string name="upload_files">העלאת קבצים</string>
+    <string name="logout_confirmation_title">אישור התנתקות</string>
+    <string name="logout_confirmation_message">האם אתה בטוח שברצונך להתנתק? כל המידע שלך יאבד!</string>
+    <string name="advantage_clean_environment">סביבה נקייה</string>
+    <string name="advantage_financial_savings">חיסכון כספי</string>
+    <string name="advantage_order_and_concentration">סדר וריכוז</string>
+    <string name="advantage_exam_purity">טוהר הבחינה</string>
+    <string name="about_us">אודותינו</string>
+    <string name="help">עזרה</string>
+
 
 </resources>

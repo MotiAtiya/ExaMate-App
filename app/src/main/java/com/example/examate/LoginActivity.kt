@@ -13,7 +13,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("LoginActivity", "on Create")
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -68,10 +67,6 @@ class LoginActivity : AppCompatActivity() {
         val timestamp = System.currentTimeMillis().toString().take(10)
         val random = (10000..99999).random().toString()
         val checksum = calculateChecksum(timestamp, random)
-        Log.d("timestamp: ", timestamp)
-        Log.d("random: ", random)
-        Log.d("checksum: ", checksum)
-        Log.d("timestamp + random + checksum: ", timestamp + random + checksum)
         return timestamp + random + checksum
     }
 

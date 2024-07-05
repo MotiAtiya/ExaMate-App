@@ -35,7 +35,6 @@ class StudentExamModeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("ExamModeActivity", "onCreate")
 
         binding = ActivityStudentExamModeBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -88,7 +87,7 @@ class StudentExamModeActivity : AppCompatActivity() {
         studentId = intent.getStringExtra("STUDENT_ID")
         classId = intent.getStringExtra("CLASS_ID")
 
-        binding.textView6.text = className
+        binding.className.text = className
     }
 
     private fun startQrCodeScanner() {
@@ -192,7 +191,7 @@ class StudentExamModeActivity : AppCompatActivity() {
                     // Bring the activity back to the front if the user tries to navigate away
                     val intent = Intent(this, StudentExamModeActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    intent.putExtra("EXAM_NAME", binding.textView6.text.toString())
+                    intent.putExtra("EXAM_NAME", binding.className.text.toString())
                     intent.putExtra("REMAINING_TIME_MILLIS", initialTimeMillis)
                     intent.putExtra("IS_OPEN_MATERIAL_ALLOWED", isOpenMaterialAllowed)
                     intent.putExtra("STUDENT_ID", studentId)
@@ -205,7 +204,6 @@ class StudentExamModeActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        Log.d("ExamModeActivity", "onNewIntent called")
         intent?.let {
             handleIntent(it)
         }

@@ -29,7 +29,6 @@ class CreateClassActivity : AppCompatActivity(), TimePickerFragment.TimePickerLi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("CreateClassActivity", "onCreate")
 
         binding = ActivityCreateClassBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -132,7 +131,6 @@ class CreateClassActivity : AppCompatActivity(), TimePickerFragment.TimePickerLi
                     }
 
                     val requestEndpoint = if (isEditMode) "editClass" else "createNewClass"
-                    Log.d("POST request", requestBody.toString())
 
                     // Show the loading overlay
                     binding.progressOverlay.visibility = View.VISIBLE
@@ -148,7 +146,6 @@ class CreateClassActivity : AppCompatActivity(), TimePickerFragment.TimePickerLi
                                         binding.progressOverlay.visibility = View.GONE
 
                                         if (jsonElement != null) {
-                                            Log.d("POST response", jsonElement.toString())
                                             val successMessage = if (isEditMode) R.string.class_updated_success else R.string.class_saved_success
                                             Toast.makeText(applicationContext, successMessage, Toast.LENGTH_SHORT).show()
 
@@ -159,7 +156,6 @@ class CreateClassActivity : AppCompatActivity(), TimePickerFragment.TimePickerLi
                                             startActivity(intent)
                                             finish()
                                         } else {
-                                            Log.d("POST response", "Failed to get response")
                                             val failureMessage = if (isEditMode) R.string.class_update_failed else R.string.class_save_failed
                                             Toast.makeText(applicationContext, failureMessage, Toast.LENGTH_SHORT).show()
                                         }
@@ -174,7 +170,6 @@ class CreateClassActivity : AppCompatActivity(), TimePickerFragment.TimePickerLi
                         NetworkUtils.postRequest(requestEndpoint, requestBody) { jsonElement ->
                             runOnUiThread {
                                 if (jsonElement != null) {
-                                    Log.d("POST response", jsonElement.toString())
                                     val newClassId = jsonElement.asJsonObject["classId"].asString
                                     uploadSelectedFiles(newClassId) { fileUploadSuccess ->
                                         // Hide the loading overlay
@@ -197,7 +192,6 @@ class CreateClassActivity : AppCompatActivity(), TimePickerFragment.TimePickerLi
                                 } else {
                                     // Hide the loading overlay
                                     binding.progressOverlay.visibility = View.GONE
-                                    Log.d("POST response", "Failed to get response")
                                     val failureMessage = R.string.class_save_failed
                                     Toast.makeText(applicationContext, failureMessage, Toast.LENGTH_SHORT).show()
                                 }

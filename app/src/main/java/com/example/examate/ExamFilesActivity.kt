@@ -43,7 +43,6 @@ class ExamFilesActivity : AppCompatActivity() {
 
         // Show loading GIF
         binding.progressBar.visibility = View.VISIBLE
-        binding.recyclerViewFiles.visibility = View.GONE
         binding.emptyTextView.visibility = View.GONE
 
         // Check if this is the first time viewing files in this session
@@ -64,7 +63,6 @@ class ExamFilesActivity : AppCompatActivity() {
         val examFilesDir = File(getExternalFilesDir(null), "ExamFiles")
         if (examFilesDir.exists() && examFilesDir.isDirectory) {
             examFilesDir.listFiles()?.forEach { it.delete() }
-            Log.d("ExamFilesActivity", "All local files deleted")
         }
     }
 
@@ -87,22 +85,17 @@ class ExamFilesActivity : AppCompatActivity() {
                     }
                 }
                 localFiles.add(destFile)
-                Log.d("ExamFilesActivity", "File copied to local folder: $fileName")
-            } catch (e: Exception) {
-                Log.e("ExamFilesActivity", "Error copying file: $fileName", e)
-            }
+            } catch (_: Exception) { }
         }
     }
 
     private fun loadFiles() {
-        Log.d("ExamFilesActivity", "loadFiles called")
         if (classId != null) {
             val firestore = Firebase.firestore
             val classDocRef = firestore.collection("classes").document(classId!!)
 
             classDocRef.collection("files").get()
                 .addOnSuccessListener { documents ->
-                    Log.d("ExamFilesActivity", "Documents fetched from Firestore")
                     for (document in documents) {
                         val fileName = document.getString("fileName")
                         val downloadUrl = document.getString("downloadUrl")
@@ -117,8 +110,6 @@ class ExamFilesActivity : AppCompatActivity() {
                     }
                     runOnUiThread {
                         updateFilesList()
-                        binding.progressBar.visibility = View.GONE
-                        binding.recyclerViewFiles.visibility = View.VISIBLE
                         if (localFiles.isEmpty()) {
                             binding.emptyTextView.visibility = View.VISIBLE
                         }
@@ -135,17 +126,13 @@ class ExamFilesActivity : AppCompatActivity() {
     }
 
     private fun downloadFileFromFirebase(downloadUrl: String, destinationFile: File) {
-        Log.d("ExamFilesActivity", "Downloading file: $downloadUrl to ${destinationFile.path}")
         val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(downloadUrl)
         storageRef.getFile(destinationFile)
             .addOnSuccessListener {
-                Log.d("DownloadFile", "File downloaded successfully: ${destinationFile.name}")
                 localFiles.add(destinationFile)
                 runOnUiThread { updateFilesList() }
             }
-            .addOnFailureListener { exception ->
-                Log.e("DownloadFile", "Error downloading file: ", exception)
-            }
+            .addOnFailureListener { }
     }
 
     private fun openFile(fileName: String) {
@@ -164,7 +151,6 @@ class ExamFilesActivity : AppCompatActivity() {
     }
 
     private fun updateFilesList() {
-        Log.d("ExamFilesActivity", "Updating files list")
         val examFilesDir = File(getExternalFilesDir(null), "ExamFiles")
         if (examFilesDir.exists() && examFilesDir.isDirectory) {
             localFiles.clear()
@@ -172,6 +158,7 @@ class ExamFilesActivity : AppCompatActivity() {
         }
         val allFiles = localFiles.map { it.name }
         filesAdapter.updateFiles(allFiles)
+        binding.progressBar.visibility = View.GONE
         binding.emptyTextView.visibility = if (allFiles.isEmpty()) View.VISIBLE else View.GONE
     }
 

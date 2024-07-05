@@ -79,5 +79,13 @@
     <string name="permission_needed_to_proceed">Permission needed to proceed</string>
     <string name="update_files">Update Files</string>
     <string name="upload_files">Upload Files</string>
+    <string name="logout_confirmation_title">Logout Confirmation</string>
+    <string name="logout_confirmation_message">Are you sure you want to logout? All your information will be lost!</string>
+    <string name="advantage_clean_environment">clean environment</string>
+    <string name="advantage_financial_savings">Financial savings</string>
+    <string name="advantage_order_and_concentration">Order and concentration</string>
+    <string name="advantage_exam_purity">Exam purity</string>
+    <string name="about_us">About Us</string>
+    <string name="help">Help</string>
 
 </resources>

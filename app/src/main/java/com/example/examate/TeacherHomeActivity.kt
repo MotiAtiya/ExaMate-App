@@ -3,6 +3,8 @@ package com.example.examate
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.examate.databinding.ActivityTeacherHomeBinding
 
@@ -30,11 +32,40 @@ class TeacherHomeActivity : AppCompatActivity() {
         }
 
         binding.buttonLogout.setOnClickListener {
-            logout()
+            showLogoutConfirmationDialog()
         }
     }
 
-    private fun logout() {
+    private fun showLogoutConfirmationDialog() {
+        AlertDialog.Builder(this).apply {
+            setTitle(getString(R.string.logout_confirmation_title))
+            setMessage(getString(R.string.logout_confirmation_message))
+            setPositiveButton(getString(R.string.ok)) { _, _ ->
+                deleteClassesAndLogout()
+            }
+            setNegativeButton(getString(R.string.cancel), null)
+        }.show()
+    }
+
+    private fun deleteClassesAndLogout() {
+        val sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE)
+        val teacherId = sharedPreferences.getString("TeacherId", null)
+
+        if (teacherId != null) {
+            val requestBody = mapOf(
+                "teacherId" to teacherId
+            )
+            NetworkUtils.postRequest("deleteClassesByTeacher", requestBody) {
+                runOnUiThread {
+                    performLogout()
+                }
+            }
+        } else {
+            performLogout()
+        }
+    }
+
+    private fun performLogout() {
         val sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.clear()

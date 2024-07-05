@@ -8,5 +8,5 @@
     <solid android:color="@color/material_on_primary_emphasis_high_type" />
     <stroke
         android:width="0.5dp"
-        android:color="@color/my_light_primary" />
+        android:color="@color/collectionOrange" />
 </shape>

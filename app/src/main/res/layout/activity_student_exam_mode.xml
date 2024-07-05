@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="00:00:00"
-        android:textColor="@color/my_light_primary"
+        android:textColor="@color/collectionOrange"
         android:textSize="40sp" />
 
     <TextView
@@ -37,14 +37,14 @@
         android:gravity="center"
         android:paddingHorizontal="22dp"
         android:text="@string/warning"
-        android:textColor="@color/my_light_primary"
+        android:textColor="@color/collectionOrange"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/className"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="56dp"
         android:gravity="center_horizontal"
         android:text=""
         android:textSize="28sp"

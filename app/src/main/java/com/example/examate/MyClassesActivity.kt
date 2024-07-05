@@ -21,7 +21,6 @@ class MyClassesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("MyClassesActivity", "onCreate")
 
         binding = ActivityMyClassesBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -89,7 +88,6 @@ class MyClassesActivity : AppCompatActivity() {
                         }
                     }
                 } else {
-                    Log.d("POST response", "Failed to get response")
                     runOnUiThread {
                         binding.recyclerViewClasses.visibility = android.view.View.GONE
                         binding.emptyTextView.visibility = android.view.View.VISIBLE
@@ -111,8 +109,6 @@ class MyClassesActivity : AppCompatActivity() {
                 "teacherId" to teacherId,
                 "classId" to classItem.classId
             )
-            Log.d("teacherId: ", teacherId)
-            Log.d("classId: ", classItem.classId)
 
             // Show loading spinner and disable interactions
             runOnUiThread {
@@ -128,7 +124,7 @@ class MyClassesActivity : AppCompatActivity() {
 
                 if (jsonElement != null) {
                     val responseMessage = jsonElement.asString
-                    if (responseMessage == "Class deleted successfully.") {
+                    if (responseMessage == "Class deleted successfully, including storage files.") {
                         runOnUiThread {
                             Toast.makeText(this, "Class deleted successfully", Toast.LENGTH_SHORT).show()
                             // Refresh the list after deletion

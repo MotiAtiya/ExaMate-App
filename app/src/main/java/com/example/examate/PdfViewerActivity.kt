@@ -49,10 +49,8 @@ class PdfViewerActivity : AppCompatActivity() {
                 .enableDoubletap(true)
                 .defaultPage(0)
                 .load()
-            Log.d("PdfViewerActivity", "PDF file loaded: $filePath")
         } else {
             Toast.makeText(this, "File not found", Toast.LENGTH_SHORT).show()
-            Log.e("PdfViewerActivity", "File not found: $filePath")
         }
     }
 

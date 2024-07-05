@@ -8,8 +8,14 @@
     <color name="colorBackground">#151B29</color>
     <color name="colorYellow">#F5FA55</color>
     <color name="colorPurple">#63519f</color>
-    <color name="my_light_primary">#ec442c</color>
-    <color name="my_dark_primary">#263238</color>
+
     <color name="card_background">#FFFFFF</color>
     <color name="card_text">#000000</color>
+
+    <color name="collectionOrange">#ec442c</color>
+    <color name="collectionBlack">#263238</color>
+    <color name="collectionBlueGray">#455a64</color>
+    <color name="collectionLightGray">#bbbbbb</color>
+    <color name="collectionWhite">#ebebeb</color>
+
 </resources>
