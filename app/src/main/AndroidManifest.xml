@@ -94,6 +94,20 @@
             android:name=".StudentFilesActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".HelpActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AboutActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            tools:replace="android:screenOrientation"/>
+
         <service android:name=".BlockingOverlayService"
             android:permission="android.permission.SYSTEM_ALERT_WINDOW"/>
 

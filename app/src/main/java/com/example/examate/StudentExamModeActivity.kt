@@ -1,35 +1,44 @@
 package com.example.examate
 
+import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
 import com.example.examate.databinding.ActivityStudentExamModeBinding
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.view.WindowInsets
+import android.view.WindowInsetsController
+import androidx.appcompat.app.AlertDialog
 
 class StudentExamModeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStudentExamModeBinding
 
     private lateinit var countDownTimer: CountDownTimer
     private var timerRunning = false
-    private var initialTimeMillis: Long = 600000 // Default timer duration in milliseconds (10 minutes)
+    private var initialTimeMillis: Long =
+        600000 // Default timer duration in milliseconds (10 minutes)
     private var isOpenMaterialAllowed = false
     private var studentId: String? = null
     private var classId: String? = null
     private var isScanningQrCode = false
     private var isFinishingActivity = false
     private var firstLoadFiles = true
+    private val handler = Handler(Looper.getMainLooper())
+    private var isDialogOpen = false
+
 
     private lateinit var qrCodeScannerLauncher: ActivityResultLauncher<ScanOptions>
 
@@ -71,13 +80,17 @@ class StudentExamModeActivity : AppCompatActivity() {
         }
 
         binding.finishButton.setOnClickListener {
-            startQrCodeScanner()
+            showDisconnectWarning()
         }
 
         startTimer()
 
         // Disable user interactions with the system UI
         disableSystemUI()
+
+        updateServer(getString(R.string.student_status_connect_exam))
+
+        startPeriodicUpdateCheck(this) // Start periodic server checks
     }
 
     private fun handleIntent(intent: Intent) {
@@ -91,12 +104,24 @@ class StudentExamModeActivity : AppCompatActivity() {
     }
 
     private fun startQrCodeScanner() {
+        updateServer(getString(R.string.student_status_disconnect_exam))
         isScanningQrCode = true
         val options = ScanOptions().apply {
             setOrientationLocked(false)
             setPrompt(getString(R.string.scan_qr_code_prompt))
         }
         qrCodeScannerLauncher.launch(options)
+    }
+
+    private fun updateServer(note: String) {
+        val requestBody = mapOf(
+            "classId" to classId,
+            "studentId" to studentId,
+            "ok" to false,
+            "statusNote" to note
+        )
+        NetworkUtils.postRequest("setStudentStatus", requestBody) { }
+
     }
 
     private fun logoutClass(disconnectId: String) {
@@ -119,13 +144,18 @@ class StudentExamModeActivity : AppCompatActivity() {
                     }
                 } else {
                     runOnUiThread {
-                        Toast.makeText(this, getString(R.string.not_allowed_to_logout), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            getString(R.string.not_allowed_to_logout),
+                            Toast.LENGTH_SHORT
+                        ).show()
                         disableSystemUI() // Re-disable the system UI if logout is not allowed
                     }
                 }
             } else {
                 runOnUiThread {
-                    Toast.makeText(this, getString(R.string.failed_to_logout), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.failed_to_logout), Toast.LENGTH_SHORT)
+                        .show()
                     disableSystemUI() // Re-disable the system UI if logout fails
                 }
             }
@@ -181,48 +211,118 @@ class StudentExamModeActivity : AppCompatActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        if (!hasFocus && !isScanningQrCode && !isFinishingActivity) {
+        if (!hasFocus && !isScanningQrCode && !isFinishingActivity && !isDialogOpen) {
             val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
             val runningTasks = activityManager.appTasks
-            if (runningTasks.isNotEmpty()) {
-                val topActivity = runningTasks[0].taskInfo.topActivity
-                if (topActivity?.className != ExamFilesActivity::class.java.name &&
-                    topActivity?.className != ScanOptions::class.java.name) {
-                    // Bring the activity back to the front if the user tries to navigate away
-                    val intent = Intent(this, StudentExamModeActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    intent.putExtra("EXAM_NAME", binding.className.text.toString())
-                    intent.putExtra("REMAINING_TIME_MILLIS", initialTimeMillis)
-                    intent.putExtra("IS_OPEN_MATERIAL_ALLOWED", isOpenMaterialAllowed)
-                    intent.putExtra("STUDENT_ID", studentId)
-                    intent.putExtra("CLASS_ID", classId)
-                    startActivity(intent)
-                }
+            val topActivity = runningTasks[0].taskInfo.topActivity
+            if (topActivity?.className != ExamFilesActivity::class.java.name &&
+                topActivity?.className != ScanOptions::class.java.name) {
+                // Bring the activity back to the front if the user tries to navigate away
+                val intent = Intent(this, StudentExamModeActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                intent.putExtra("EXAM_NAME", binding.className.text.toString())
+                intent.putExtra("REMAINING_TIME_MILLIS", initialTimeMillis)
+                intent.putExtra("IS_OPEN_MATERIAL_ALLOWED", isOpenMaterialAllowed)
+                intent.putExtra("STUDENT_ID", studentId)
+                intent.putExtra("CLASS_ID", classId)
+                startActivity(intent)
             }
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        intent?.let {
-            handleIntent(it)
-        }
-    }
+//    override fun onNewIntent(intent: Intent?) {
+//        super.onNewIntent(intent)
+//        intent?.let {
+//            handleIntent(it)
+//        }
+//    }
 
     private fun disableSystemUI() {
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.let {
+                it.hide(WindowInsets.Type.systemBars())
+                it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+        }
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     private fun enableSystemUI() {
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.let {
+                it.show(WindowInsets.Type.systemBars())
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        }
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+
+//    private fun showDisconnectWarning() {
+//        val dialog = AlertDialog.Builder(this)
+//            .setTitle(this.getString(R.string.disconnection_warning_title))
+//            .setMessage(this.getString(R.string.disconnection_warning_msg))
+//            .setPositiveButton(this.getString(R.string.continue_btn)) { dialog, _ ->
+//                startQrCodeScanner()
+//                dialog.dismiss()
+//            }
+//            .setNegativeButton(this.getString(R.string.cancel)) { dialog, _ ->
+//                dialog.dismiss()
+//            }
+//            .create()
+//        dialog.setOnDismissListener {
+//            // Reset the state or perform any additional actions if needed
+//        }
+//        dialog.show()
+//    }
+    private fun showDisconnectWarning() {
+    isDialogOpen = true
+    AlertDialog.Builder(this)
+            .setTitle(this.getString(R.string.disconnection_warning_title))
+            .setMessage(this.getString(R.string.disconnection_warning_msg))
+            .setPositiveButton(this.getString(R.string.continue_btn)) { dialog, _ ->
+                startQrCodeScanner()
+                dialog.dismiss()
+                isDialogOpen = false
+            }
+            .setNegativeButton(this.getString(R.string.cancel)) { dialog, _ ->
+                dialog.dismiss()
+                isDialogOpen = false
+            }
+            .show()
+    }
+
+    private fun startPeriodicUpdateCheck(activity: Activity) {
+        handler.post(object : Runnable {
+            override fun run() {
+                if(!PermissionUtils.isDoNotDisturbPermissionActive(activity)) {
+                    updateServer(getString(R.string.student_status_turn_off_dnd))
+                    handler.postDelayed(this, 300000) // Schedule next check in 5 seconds
+                    return
+                }
+                handler.postDelayed(this, 10000) // Schedule next check in 5 seconds
+            }
+        })
+    }
+    override fun onPause() {
+        super.onPause()
+//        onWindowFocusChanged(false)
+    }
+
+    override fun onStop() {
+        super.onStop()
+//        onWindowFocusChanged(false)
     }
 
     override fun onDestroy() {

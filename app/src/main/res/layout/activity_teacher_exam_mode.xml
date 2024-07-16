@@ -20,19 +20,13 @@
             android:textStyle="bold"
             android:layout_gravity="center_horizontal"/>
 
-        <Button
-            android:id="@+id/buttonShowId"
+        <TextView
+            android:id="@+id/connectedStudentsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/show_connect_qr_code"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"/>
-
-        <Button
-            android:id="@+id/buttonShowDisconnectId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/show_disconnect_qr_code"
+            android:text="@string/connected_students_title"
+            android:textSize="18sp"
+            android:textStyle="bold"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"/>
 
@@ -53,6 +47,37 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/buttonUpdates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/updates"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:paddingHorizontal="30dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/buttonShowId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/show_connect_qr_code"
+                android:layout_marginEnd="16dp"/>
+
+            <Button
+                android:id="@+id/buttonShowDisconnectId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/show_disconnect_qr_code"/>
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

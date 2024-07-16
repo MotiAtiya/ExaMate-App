@@ -16,6 +16,11 @@ object PermissionUtils {
         }
     }
 
+    fun isDoNotDisturbPermissionActive(activity: Activity) :Boolean {
+        val zenMode = Settings.Global.getInt(activity.contentResolver, "zen_mode", 0)
+        return zenMode != 0
+    }
+
     private fun showRequestDNDPermission(activity: Activity) {
         AlertDialog.Builder(activity)
             .setTitle(activity.getString(R.string.permission_required))

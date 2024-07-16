@@ -42,7 +42,8 @@
     <string name="edit">Edit</string>
     <string name="start_exam">Start Exam</string>
     <string name="class_id_qr_code">Class ID QR Code</string>
-    <string name="show_connect_qr_code">Show Connect QR Code</string>
+    <string name="show_connect_qr_code">QR to Connect</string>
+    <string name="show_disconnect_qr_code">QR to Disconnect</string>
     <string name="no_files_available">No files available</string>
     <string name="add_file">Add File</string>
     <string name="no_classes_available">No classes available</string>
@@ -72,7 +73,6 @@
     <string name="not_allowed_to_logout">Not allowed to logout</string>
     <string name="failed_to_logout">Failed to logout</string>
     <string name="no_students_connected">No students connected</string>
-    <string name="show_disconnect_qr_code">Show Disconnect QR Code</string>
     <string name="permission_required">Permission required</string>
     <string name="dnd_permission_required">Do Not Disturb permission required\nSettings -> Notifications -> Do Not Disturb -> Turn on</string>
     <string name="go_to_settings">Go to notifications settings</string>
@@ -87,5 +87,25 @@
     <string name="advantage_exam_purity">Exam purity</string>
     <string name="about_us">About Us</string>
     <string name="help">Help</string>
+    <string name="disconnection_warning_title">Disconnection Warning</string>
+    <string name="disconnection_warning_msg">Are you sure you want to disconnect?\nPlease note, this action is only permitted if you have completed the exam and submitted it to the instructor.\nClicking this button during the exam will automatically send an update to the instructor and may jeopardize your exam!</string>
+    <string name="continue_btn">continue</string>
+    <string name="student_status_disconnect_exam">in the process of exiting the exam, pay attention!</string>
+    <string name="student_status_connect_exam">connected successfully</string>
+    <string name="student_status_turn_off_dnd">turns off Do Not Disturb permission!</string>
+    <string name="connected_students_title">Connected Students</string>
+    <string name="updates">Updates</string>
+    <string name="close">Close</string>
+
+    <string name="about_text">The application was created as a final project by Meir Shuvax and Mordechai Atiya, students at Hadassah Academic College Jerusalem, under the guidance of lecturer Muawyah Akash, and led by projects coordinator Tuvia Rosenberg.</string>
+    <string name="contact_us">For improvements and suggestions, write to us at:</string>
+    <string name="meir_shuvax">Meir Shuvax</string>
+    <string name="mordechai_atiya">Mordechai Atiya</string>
+
+    <string name="help_intro">ExaMate is an Android app designed to simplify the exam process and save on costs and paper resources. The app allows teachers to create virtual classrooms and upload permitted exam materials while locking students\' devices during the exam to ensure exam integrity.</string>
+    <string name="help_teacher_title">The lecturer interface:</string>
+    <string name="help_teacher_scenarios">1. Register as a teacher: Fill in personal details, and select the teacher status.\n2. Create a class: The teacher will create a new class, define exam details, and upload relevant materials. The exam date and start time will be set to the same time to allow immediate exam start.\n3. Start exam: From the list of classes created by the teacher, the teacher will select the new class they just created and choose "Start Exam".\n4. Show QR code for connection: The teacher will display the connection QR code to the students.\n5. View connected list: The teacher will verify that the students have joined the class.\n6. Show QR code for disconnection: The teacher will display the disconnection QR code to the students at the end of the exam.\n7. Update connected list: The teacher will verify that the disconnected students are no longer on the list.\n8. Delete or update class: The teacher can update class details or delete it from the list.</string>
+    <string name="help_student_title">The student interface:</string>
+    <string name="help_student_scenarios">1. Register as a student: Fill in personal details, and select the student status.\n2. Upload files from the device: The student will upload PDF files from the device to the app. These files will be displayed during the exam only if the teacher has approved them in the class settings.\n3. Connect to an existing class: The student will scan the QR code provided by the teacher using the camera and join the class. All class details should appear.\n4. Lock the device: Upon connection, the student will see that the app has taken control of the system with no way to exit during the exam, and the teacher will see alerts for any break-in attempts.\n5. View files: The student side will attempt to access the files uploaded by the teacher and search for values.\n6. Disconnect: At the end of the exam, the student will scan a new code from the teacher\'s app and regain access to the device.</string>
 
 </resources>

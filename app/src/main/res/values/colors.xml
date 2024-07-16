@@ -18,4 +18,6 @@
     <color name="collectionLightGray">#bbbbbb</color>
     <color name="collectionWhite">#ebebeb</color>
 
+    <color name="light_gray">#D3D3D3</color>
+
 </resources>

@@ -47,6 +47,10 @@ class JoinClassActivity : AppCompatActivity() {
 
     private fun startQrCodeScanner() {
         val options = ScanOptions().apply {
+            setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+            setCameraId(0)
+            setBeepEnabled(false)
+            setBarcodeImageEnabled(true)
             setOrientationLocked(false)
             setPrompt(getString(R.string.scan_qr_code_prompt))
         }
